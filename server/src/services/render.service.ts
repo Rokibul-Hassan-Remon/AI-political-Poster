@@ -21,16 +21,36 @@ export interface RenderData {
   area?: string;
   headline: string;
   photoUrls: string[];
+  photoAdjust?: { x?: number | null; y?: number | null; zoom?: number | null }[];
 }
 
 const escapeHtml = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
+const clamp = (n: unknown, min: number, max: number, dflt: number) =>
+  typeof n === 'number' && Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : dflt;
+
+// Same result as the form preview (object-position + scale(zoom) around the focal point), but without
+// scaling the frame/border: object-view-box (Chromium) crops the image to 1/zoom around (x, y) first.
+function adjustStyle(a: NonNullable<RenderData['photoAdjust']>[number] | undefined): string {
+  if (!a) return '';
+  const x = clamp(a.x, 0, 100, 50), y = clamp(a.y, 0, 100, 50), zoom = clamp(a.zoom, 1, 3, 1);
+  const k = 1 - 1 / zoom; // share of each axis cropped away
+  const r = (n: number) => +n.toFixed(2);
+  return ` style="object-position:${x}% ${y}%;object-view-box:inset(${r(k * y)}% ${r(k * (100 - x))}% ${r(k * (100 - y))}% ${r(k * x)}%)"`;
+}
+
+// photoUrls[0] is the user's main photo: tagged `.main` and, with 3 photos, moved to the middle.
+function photoTags(urls: string[], adjust: RenderData['photoAdjust'] = []): string {
+  const tags = urls.map((u, i) => `<img class="photo${i === 0 ? ' main' : ''}" src="${escapeHtml(u)}"${adjustStyle(adjust[i])} alt="">`);
+  return (tags.length === 3 ? [tags[1], tags[0], tags[2]] : tags).join('');
+}
+
 // Every {{key}} in the template is replaced; text values are escaped, `fonts` and `photos` are built here.
 export function fillTemplate(html: string, d: RenderData): string {
   const vars: Record<string, string> = {
     fonts: FONTS_CSS,
-    photos: d.photoUrls.map((u) => `<img class="photo" src="${escapeHtml(u)}" alt="">`).join(''),
+    photos: photoTags(d.photoUrls, d.photoAdjust),
     photoCount: String(d.photoUrls.length),
     headlineSize: d.headlineSize,
     ...d.scheme, // hex colors, validated by the Template model / Gemini zod schema

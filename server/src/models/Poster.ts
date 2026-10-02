@@ -14,6 +14,8 @@ const posterSchema = new Schema(
       headline: String, // empty → template's headlineDefault at render time
     },
     uploadedPhotoUrls: { type: [String], required: true },
+    // One per photo, same order: focal point (x, y in %) + zoom, set by the user on the form.
+    photoAdjust: { type: [{ _id: false, x: Number, y: Number, zoom: Number }], default: undefined },
     aiSuggestion: Schema.Types.Mixed, // Gemini JSON used for the last render
     generatedImageUrl: String,
     generatedPdfUrl: String,

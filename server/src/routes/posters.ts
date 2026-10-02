@@ -22,7 +22,11 @@ const createBody = z.object({
   templateId: z.string().refine(isValidObjectId, 'Invalid template id'),
   formData,
   uploadedPhotoUrls: z.array(z.url()).min(1).max(3),
-});
+  photoAdjust: z
+    .array(z.object({ x: z.number().min(0).max(100), y: z.number().min(0).max(100), zoom: z.number().min(1).max(3) }))
+    .max(3)
+    .optional(),
+}).refine((b) => !b.photoAdjust || b.photoAdjust.length === b.uploadedPhotoUrls.length, 'photoAdjust needs one entry per photo');
 const regenerateBody = z.object({ formData: formData.optional() });
 
 // Puppeteer will load these URLs: only accept the user's own uploads (no SSRF, no hotlinking).

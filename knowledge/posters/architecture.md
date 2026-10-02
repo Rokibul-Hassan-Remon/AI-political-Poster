@@ -7,6 +7,7 @@
 | templateId | ObjectId → Template | |
 | formData | `{ name, designation, organization, area?, headline? }` | |
 | uploadedPhotoUrls | string[] | 1–3 |
+| photoAdjust | `{ x, y, zoom }[]` | optional, one per photo: focal point % (0–100) + zoom (1–3), set by pan/zoom on the form |
 | aiSuggestion | object | Gemini JSON used for the last render |
 | generatedImageUrl | string | PNG |
 | generatedPdfUrl | string | |
@@ -18,7 +19,7 @@
 ## Endpoints (all `requireAuth`, owner-only)
 | method | path | notes |
 |---|---|---|
-| POST | `/api/posters` | `{templateId, formData, uploadedPhotoUrls}` → poster (`generating`), starts job |
+| POST | `/api/posters` | `{templateId, formData, uploadedPhotoUrls, photoAdjust?}` → poster (`generating`), starts job |
 | GET | `/api/posters/me` | history, newest first |
 | GET | `/api/posters/:id` | client polls every 2s until not `generating` |
 | POST | `/api/posters/:id/regenerate` | optional new `formData`; 409 if limit reached |
@@ -29,6 +30,7 @@ Rate limit (`express-rate-limit`, 10/hour, keyed by user id, in-memory) on creat
 ## Validation & errors
 - `formData`: name/designation ≤100, organization/area/headline ≤150, trimmed; empty `area`/`headline` are dropped (headline then falls back to the template default at render).
 - `uploadedPhotoUrls`: 1–3, must be `https://res.cloudinary.com/.../rise-together/photos/<userId>/...` (Puppeteer loads them — no SSRF, no other users' photos) → else 400.
+- `photoAdjust` (optional): one `{x, y, zoom}` per photo, x/y 0–100, zoom 1–3 → else 400. Regenerate keeps it.
 - Template must exist and be active (404); photo count ≤ `layoutConfig.photoSlots` (400).
 - Not found / bad id → 404; other user's poster → 403.
 - Regenerate: 409 while `generating` or when `regenerateCount >= 3`. Body `{ formData? }` replaces the whole formData; photos and template can't change.

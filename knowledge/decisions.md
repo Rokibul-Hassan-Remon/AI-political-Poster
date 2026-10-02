@@ -22,3 +22,6 @@ Frontend and backend are on different domains; httpOnly cross-site cookies add C
 
 ## D7 — Access token in memory + refresh token in httpOnly cookie, via Next.js rewrite proxy (2026-10-03)
 Access JWT (15 min) returned in the body and kept in JS memory; refresh JWT (7 days) in an httpOnly, secure, sameSite=strict cookie scoped to `/api/auth`. XSS can no longer steal a long-lived token. Vercel and Render are different sites, so the client proxies `/api/*` to Express with `next.config.ts` rewrites — the cookie is first-party and CORS is unused by the browser. Ceiling: refresh tokens aren't rotated or revocable (logout only clears the cookie). Upgrade: `tokenVersion` on User, bumped on logout/password change.
+
+## D8 — User picks the main photo; fixed slots, no freeform placement (2026-10-03)
+Gemini only got a photo count, never the photos, so its `photoOrder` was arbitrary and could override the user's choice; removed. The user marks one photo as main on the form (`uploadedPhotoUrls[0]`); templates keep fixed slots so photos never cover the headline/footer. Pan + zoom inside each frame is allowed (`photoAdjust`, native CSS, no editor library). Ceiling: photos can't leave their slot. Upgrade: per-slot picker, or a canvas editor (react-konva) with saved positions.

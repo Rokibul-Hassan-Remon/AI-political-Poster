@@ -5,12 +5,11 @@ import { suggest, type Suggestion } from './gemini.service';
 import { render } from './render.service';
 import { uploadBuffer } from './storage.service';
 
-// Used when Gemini is off or fails: template colors, photos as uploaded, size by headline length.
-function fallback(scheme: Suggestion['scheme'], headline: string, photoCount: number): Suggestion {
+// Used when Gemini is off or fails: template colors, size by headline length.
+function fallback(scheme: Suggestion['scheme'], headline: string): Suggestion {
   const len = [...headline].length;
   return {
     scheme,
-    photoOrder: [...Array(photoCount).keys()],
     headlineSize: len <= 12 ? '2xl' : len <= 24 ? 'xl' : 'lg',
   };
 }
@@ -29,7 +28,6 @@ export async function run(posterId: string): Promise<void> {
     const scheme = { ...defaultScheme! };
     const form = poster.formData!;
     const headline = form.headline || headlineDefault;
-    const photos = poster.uploadedPhotoUrls;
 
     let suggestion: Suggestion;
     try {
@@ -37,11 +35,10 @@ export async function run(posterId: string): Promise<void> {
         occasionType: template.occasionType,
         defaultScheme: scheme,
         headline,
-        photoCount: photos.length,
       }));
     } catch (err) {
       console.warn('Gemini skipped, using default scheme:', (err as Error).message);
-      suggestion = fallback(scheme, headline, photos.length);
+      suggestion = fallback(scheme, headline);
     }
 
     const { png, pdf } = await render(template.slug, {
@@ -52,7 +49,8 @@ export async function run(posterId: string): Promise<void> {
       organization: form.organization,
       area: form.area ?? undefined,
       headline,
-      photoUrls: suggestion.photoOrder.map((i) => photos[i]),
+      photoUrls: poster.uploadedPhotoUrls, // user's order; [0] is the main photo
+      photoAdjust: poster.photoAdjust ?? undefined,
     });
     const folder = `rise-together/posters/${poster.userId}`;
     const [imageUrl, pdfUrl] = await Promise.all([uploadBuffer(png, folder), uploadBuffer(pdf, folder)]);

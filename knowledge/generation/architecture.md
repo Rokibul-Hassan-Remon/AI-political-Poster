@@ -2,7 +2,7 @@
 
 ## Pipeline (`generation.service.run(posterId)`)
 1. Load poster + template. Headline = `formData.headline` or `layoutConfig.headlineDefault`.
-2. `gemini.service.suggest({ occasionType, defaultScheme, headline, photoCount })` → JSON validated with zod. On any error (no key, 15s timeout, bad JSON, `photoOrder` not a permutation) → fallback: `defaultScheme`, photos in upload order, `headlineSize` by headline length (≤12 chars `2xl`, ≤24 `xl`, else `lg`).
+2. `gemini.service.suggest({ occasionType, defaultScheme, headline })` → JSON validated with zod. On any error (no key, 15s timeout, bad JSON) → fallback: `defaultScheme`, `headlineSize` by headline length (≤12 chars `2xl`, ≤24 `xl`, else `lg`).
 3. `render.service.render(slug, data)` → fill `server/src/templates/<slug>.html` → Puppeteer → PNG + PDF buffers.
 4. Upload both to Cloudinary `rise-together/posters/<userId>/` via `storage.service` → `Poster.updateOne` (`completed`, `aiSuggestion`, URLs). Any throw → `failed` + generic `error` (details only in logs/GenerationLog).
 5. Write `GenerationLog` (success or failure).
@@ -11,8 +11,8 @@
 
 ## Gemini
 - SDK: `@google/genai`, `ai.models.generateContent` with `responseMimeType: 'application/json'` and `responseJsonSchema: z.toJSONSchema(suggestionSchema)` — one zod schema drives both the request and validation.
-- Response: `{ scheme: {primary,secondary,accent,text}, photoOrder: number[], headlineSize: 'lg'|'xl'|'2xl' }` (colors `#RRGGBB`).
-- Prompt carries only occasion, default colors, headline length, photo count — no user text or PII.
+- Response: `{ scheme: {primary,secondary,accent,text}, headlineSize: 'lg'|'xl'|'2xl' }` (colors `#RRGGBB`).
+- Prompt carries only occasion, default colors, headline length — no user text or PII. Photo order is the user's, not Gemini's (D8).
 - Model: `GEMINI_MODEL`, default `gemini-3.8-flash` (`gemini-2.5-flash` returns 404 for new keys as of 2026-10-03).
 - Cache by `templateId + occasion` is post-MVP (cost control).
 
@@ -28,7 +28,7 @@ One self-contained HTML file per seeded template slug. Placeholders `{{key}}`:
 | Key | Value |
 |---|---|
 | `fonts` | `@font-face` CSS with Hind Siliguri 400/700 as base64 data URIs |
-| `photos` | `<img class="photo">` per photo, in `photoOrder` |
+| `photos` | `<img class="photo">` per photo in upload order; `uploadedPhotoUrls[0]` (main) also gets class `main` and, with 3 photos, is placed in the middle. With `photoAdjust`, each img gets an inline `object-position` + `object-view-box: inset(...)` crop (Chromium-only CSS; same result as the form preview's `scale(zoom)` around the focal point, without scaling the frame) |
 | `photoCount` | `1`–`3` (use as class `n{{photoCount}}` for layout) |
 | `headlineSize` | `lg` / `xl` / `2xl` (CSS classes; `2xl` is `.\32xl`) |
 | `primary`, `secondary`, `accent`, `text` | hex colors |

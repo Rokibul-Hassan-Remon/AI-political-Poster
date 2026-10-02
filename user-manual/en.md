@@ -24,7 +24,8 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 
 - Type Bangla exactly as you want it printed. The system **never changes your text**.
 - Click the **+ ছবি যোগ করুন** box to add photos (you can pick several at once). Each photo shows a preview; **×** removes it.
-- The photo marked **মূল ছবি** is the main (center) photo. Click **মূল ছবি করুন** on another photo to make it the main one.
+- The photo marked **মূল ছবি** is the main photo: it goes in the middle (and is biggest when there are 3 photos); with 2 photos it goes on the left. Click **মূল ছবি করুন** on another photo to make it the main one.
+- Drag a photo inside its frame to move it, and use the slider under it to zoom in, so the face sits right. The poster uses the same framing.
 - Only upload photos you have permission to use.
 
 ## 4. Generate and preview
