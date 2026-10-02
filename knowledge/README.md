@@ -9,7 +9,7 @@ Code wins over docs when they disagree — then fix the doc.
 |---|---|---|
 | [auth](auth/) | register, login, JWT, roles | done |
 | [storage](storage/) | photo upload, Cloudinary | planned |
-| [templates](templates/) | poster templates, seed script | planned |
+| [templates](templates/) | poster templates, seed script | done |
 | [posters](posters/) | poster request, status, history, regenerate, delete | planned |
 | [generation](generation/) | Gemini suggestion + Puppeteer render + export | planned |
 

@@ -8,9 +8,9 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 3. You are logged in. Next time, use **Login** with the same email and password.
 
 ## 2. Choose a template
-1. Go to **Templates**.
+1. After logging in, click **টেমপ্লেট দেখুন** (View templates) on the home page.
 2. Filter by occasion: Victory Day, Mourning / Tribute, Election Campaign, Greetings, Eid / Festival.
-3. Click the design you like.
+3. Each card shows the design's colors, its default headline and how many photos it takes (1–3). Click the one you like.
 
 ## 3. Fill the form
 | Field | Required | Example |

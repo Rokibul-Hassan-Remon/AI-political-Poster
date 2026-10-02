@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import { env } from './config/env';
 import { HttpError, errorHandler } from './middleware/error';
 import { authRouter } from './routes/auth';
+import { templatesRouter } from './routes/templates';
 
 const app = express();
 app.use(cors({ origin: env.CLIENT_URL }));
@@ -16,6 +17,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/templates', templatesRouter);
 
 app.use((_req, _res, next) => next(new HttpError(404, 'Not found')));
 app.use(errorHandler);
