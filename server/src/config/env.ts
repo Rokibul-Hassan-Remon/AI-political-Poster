@@ -8,6 +8,7 @@ const schema = z.object({
   CLIENT_URL: z.url().default('http://localhost:3000'),
   JWT_SECRET: z.string().min(32),
   JWT_REFRESH_SECRET: z.string().min(32),
+  CLOUDINARY_URL: z.string().startsWith('cloudinary://'),
   // Optional: only the seed script reads these.
   ADMIN_EMAIL: z.email().trim().toLowerCase().optional(),
   ADMIN_PASSWORD: z.string().min(8).max(72).optional(),
