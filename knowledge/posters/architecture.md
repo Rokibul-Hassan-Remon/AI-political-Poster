@@ -37,7 +37,6 @@ Rate limit (`express-rate-limit`, 10/hour, keyed by user id, in-memory) on creat
 ## Flow
 `route` → save Poster → `generation.service.run(posterId)` (not awaited) → updates Poster status.
 On server boot: `failStaleJobs()` marks leftover `generating` posters as `failed` (see decisions D4).
-Until the generation module lands, `run()` is a stub that marks the poster `failed` ("Poster generation is not available yet").
 
 ## Files
 `server/src/models/Poster.ts`, `server/src/routes/posters.ts`, `server/src/services/generation.service.ts`;

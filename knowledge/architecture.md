@@ -34,7 +34,7 @@ flowchart LR
 
 - The browser calls `/api/*` on the client origin; Next.js rewrites proxy it to `server/` (D7).
 - `client/` never talks to MongoDB, Cloudinary or Gemini directly — only to `server/` over REST.
-- Gemini returns a **JSON suggestion** (colors, photo order, headline size, slogan). It never draws the poster or rewrites user text (D1).
+- Gemini returns a **JSON suggestion** (colors, photo order, headline size). It never draws the poster or rewrites user text (D1).
 - Puppeteer renders an HTML template with the user's exact Bangla text → PNG (2400×3200) + PDF.
 
 `GET /api/health` → `{ status, db }` for uptime checks (Render) and local setup verification.
