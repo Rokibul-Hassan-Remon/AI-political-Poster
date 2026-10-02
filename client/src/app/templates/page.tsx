@@ -60,14 +60,14 @@ export default function TemplatesPage() {
         {templates?.map((t) => {
           const s = t.layoutConfig.defaultScheme;
           return (
-            <Link key={t._id} href={`/create/${t._id}`} className="overflow-hidden rounded-lg border hover:shadow-lg">
-              {/* ponytail: no thumbnail images yet; a color preview from the default scheme stands in. */}
+            <Link key={t._id} href={`/create/${t._id}`} className="group overflow-hidden rounded-lg border transition hover:-translate-y-1 hover:shadow-xl">
+              {/* Thumbnails are rendered from the real template by `npm run seed`; the color block is a fallback. */}
               {t.thumbnailUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={t.thumbnailUrl} alt={t.title} className="aspect-[3/4] w-full object-cover" />
+                <img src={t.thumbnailUrl} alt={t.title} loading="lazy" className="aspect-3/4 w-full object-cover transition group-hover:scale-105" />
               ) : (
                 <div
-                  className="flex aspect-[3/4] items-center justify-center p-4 text-center text-2xl font-bold"
+                  className="flex aspect-3/4 items-center justify-center p-4 text-center text-2xl font-bold"
                   style={{ background: `linear-gradient(${s.primary}, ${s.secondary})`, color: s.text, borderBottom: `8px solid ${s.accent}` }}
                 >
                   {t.layoutConfig.headlineDefault}
@@ -75,7 +75,9 @@ export default function TemplatesPage() {
               )}
               <div className="p-3">
                 <p className="font-semibold">{t.title}</p>
-                <p className="text-sm text-neutral-500">{t.layoutConfig.photoSlots}টি ছবি</p>
+                <p className="text-sm text-neutral-500">
+                  {OCCASIONS.find(([v]) => v === t.occasionType)?.[1]} · {t.layoutConfig.photoSlots}টি ছবি
+                </p>
               </div>
             </Link>
           );

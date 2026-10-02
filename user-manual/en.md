@@ -10,7 +10,7 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 ## 2. Choose a template
 1. After logging in, click **টেমপ্লেট দেখুন** (View templates) on the home page.
 2. Filter by occasion: Victory Day, Mourning / Tribute, Election Campaign, Greetings, Eid / Festival.
-3. Each card shows the design's colors, its default headline and how many photos it takes (1–3). Click the one you like.
+3. Each card shows a preview of the finished poster, its occasion and how many photos it takes (1–3). Click the one you like.
 
 ## 3. Fill the form
 | Field | Required | Example |
@@ -23,7 +23,8 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 | Photos | 1–3 | JPG, PNG or WEBP, up to 5 MB each |
 
 - Type Bangla exactly as you want it printed. The system **never changes your text**.
-- Photo 1 is the main (center) photo.
+- Click the **+ ছবি যোগ করুন** box to add photos (you can pick several at once). Each photo shows a preview; **×** removes it.
+- The photo marked **মূল ছবি** is the main (center) photo. Click **মূল ছবি করুন** on another photo to make it the main one.
 - Only upload photos you have permission to use.
 
 ## 4. Generate and preview

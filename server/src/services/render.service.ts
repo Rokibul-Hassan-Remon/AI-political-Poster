@@ -52,6 +52,11 @@ function getBrowser() {
   return browser;
 }
 
+// For one-off scripts (seed) so Node can exit; the server keeps the browser for its lifetime.
+export async function closeBrowser() {
+  await (await browser)?.close();
+}
+
 export async function render(slug: string, data: RenderData): Promise<{ png: Buffer; pdf: Buffer }> {
   const html = fillTemplate(readFileSync(path.join(TEMPLATES_DIR, `${slug}.html`), 'utf8'), data);
   const page = await (await getBrowser()).newPage();

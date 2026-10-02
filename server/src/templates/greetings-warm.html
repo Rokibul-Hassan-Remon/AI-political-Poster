@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<style>
+{{fonts}}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1200px; height: 1600px; overflow: hidden; }
+body {
+  font-family: 'Hind Siliguri', sans-serif; color: {{text}}; background: {{secondary}};
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  border: 18px solid {{primary}}; outline: 6px solid {{accent}}; outline-offset: -30px;
+}
+.band { width: 100%; background: {{primary}}; color: {{secondary}}; padding: 60px 50px 70px; border-bottom: 12px solid {{accent}}; border-radius: 0 0 50% 50% / 0 0 80px 80px; }
+.headline { font-weight: 700; line-height: 1.25; }
+.lg { font-size: 96px; } .xl { font-size: 120px; } .\32xl { font-size: 144px; }
+.photos { flex: 1; display: flex; gap: 36px; align-items: center; justify-content: center; width: 100%; padding: 30px 50px; }
+.photo { width: 320px; height: 320px; object-fit: cover; border-radius: 50%; border: 12px solid {{accent}}; box-shadow: 0 0 0 8px {{primary}}, 0 16px 40px rgba(0,0,0,.3); }
+.n1 .photo { width: 600px; height: 600px; }
+.n2 .photo { width: 440px; height: 440px; }
+.footer { width: calc(100% - 100px); margin-bottom: 60px; background: {{primary}}; color: {{secondary}}; border-radius: 24px; padding: 28px 40px; }
+.name { font-size: 76px; font-weight: 700; line-height: 1.2; color: {{accent}}; }
+.meta { font-size: 40px; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <div class="band"><h1 class="headline {{headlineSize}}">{{headline}}</h1></div>
+  <div class="photos n{{photoCount}}">{{photos}}</div>
+  <div class="footer">
+    <div class="name">{{name}}</div>
+    <div class="meta">{{designation}}, {{organization}}</div>
+    <div class="meta">{{area}}</div>
+  </div>
+</body>
+</html>

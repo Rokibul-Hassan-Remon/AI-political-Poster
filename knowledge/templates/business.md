@@ -11,7 +11,7 @@ Curated poster designs, grouped by occasion:
 | `festival` | ঈদ / উৎসব |
 
 ## Rules
-- MVP ships 2–3 templates (victory-day, mourning, campaign), added by seed script.
+- MVP ships 5 templates, one per occasion, added by seed script.
 - Inactive templates are hidden from users.
 - Style reference: big Bangla headline, 1–3 framed leader photos at top, flag-color decoration, footer bar with requester name/designation/organization and a "প্রচারে" credit line.
 - No real party symbols bundled (copyright + misuse risk).

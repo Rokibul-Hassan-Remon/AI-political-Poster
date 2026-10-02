@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import { env } from '../config/env';
 import { Template, type TemplateData } from '../models/Template';
 import { User } from '../models/User';
+import { closeBrowser, render } from '../services/render.service';
+import { uploadBuffer } from '../services/storage.service';
 
 const templates: Omit<TemplateData, 'createdAt' | 'updatedAt' | 'isActive' | 'thumbnailUrl'>[] = [
   {
@@ -36,15 +38,62 @@ const templates: Omit<TemplateData, 'createdAt' | 'updatedAt' | 'isActive' | 'th
       headlineDefault: 'আপনার ভোট আপনার অধিকার',
     },
   },
+  {
+    title: 'ঈদ মোবারক',
+    slug: 'eid-mubarak',
+    occasionType: 'festival',
+    layoutConfig: {
+      photoSlots: 2,
+      defaultScheme: { primary: '#0B3D2E', secondary: '#14614A', accent: '#F2C14E', text: '#FFFFFF' },
+      headlineDefault: 'ঈদ মোবারক',
+    },
+  },
+  {
+    title: 'শুভেচ্ছা',
+    slug: 'greetings-warm',
+    occasionType: 'greetings',
+    layoutConfig: {
+      photoSlots: 2,
+      defaultScheme: { primary: '#7A1F2B', secondary: '#FFF6E5', accent: '#E0A526', text: '#3A1A1F' },
+      headlineDefault: 'আন্তরিক শুভেচ্ছা',
+    },
+  },
 ];
+
+// Grey head-and-shoulders silhouette standing in for leader photos on the thumbnails.
+const SAMPLE_PHOTO =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400"><rect width="300" height="400" fill="#cfcfcf"/><circle cx="150" cy="150" r="70" fill="#8a8a8a"/><path d="M30 400c0-90 55-150 120-150s120 60 120 150z" fill="#8a8a8a"/></svg>',
+  );
+
+// Renders the real HTML template with sample data so the gallery shows what the poster actually looks like.
+// ponytail: uploads a new Cloudinary asset on every seed run; old ones are left behind (seed runs rarely).
+async function renderThumbnail(t: (typeof templates)[number]): Promise<string> {
+  const lc = t.layoutConfig!; // always set in the literals above
+  const { png } = await render(t.slug, {
+    scheme: lc.defaultScheme!,
+    headlineSize: 'xl',
+    name: 'আপনার নাম',
+    designation: 'পদবি',
+    organization: 'দল / সংগঠন',
+    area: 'এলাকা',
+    headline: lc.headlineDefault,
+    photoUrls: Array(lc.photoSlots).fill(SAMPLE_PHOTO),
+  });
+  const url = await uploadBuffer(png, 'rise-together/thumbnails');
+  return url.replace('/upload/', '/upload/w_600,f_auto,q_auto/'); // Cloudinary resizes on delivery
+}
 
 async function seed() {
   await mongoose.connect(env.MONGODB_URI);
 
   for (const t of templates) {
-    await Template.updateOne({ slug: t.slug }, { $set: t }, { upsert: true, runValidators: true });
+    const thumbnailUrl = await renderThumbnail(t);
+    await Template.updateOne({ slug: t.slug }, { $set: { ...t, thumbnailUrl } }, { upsert: true, runValidators: true });
     console.log(`template: ${t.slug}`);
   }
+  await closeBrowser();
 
   if (env.ADMIN_EMAIL && env.ADMIN_PASSWORD) {
     await User.updateOne(
