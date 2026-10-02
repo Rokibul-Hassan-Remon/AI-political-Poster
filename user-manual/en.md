@@ -27,16 +27,16 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 - Only upload photos you have permission to use.
 
 ## 4. Generate and preview
-1. Click **Generate**. Wait a few seconds while the poster is made.
+1. Click **পোস্টার তৈরি করুন** (Create poster). Your photos upload, then the poster page opens and shows progress while the poster is made (a few seconds).
 2. Check the preview. Colors and layout are suggested by AI to match the occasion.
-3. Not happy? Edit the text and click **Regenerate**. You can regenerate **3 times** per poster.
+3. Not happy? Edit the text and click **আবার তৈরি করুন** (Regenerate). The button shows how many tries are left — **3** per poster.
 
 ## 5. Download
 - **PNG** — high resolution (2400×3200), ready for the printing press.
 - **PDF** — same poster, for printers who prefer PDF.
 
 ## 6. History
-Open **History** to see all your posters, download them again, or delete them.
+Click **আমার পোস্টার** (My posters) on the home page to see all your posters, newest first. Open one to download it again, regenerate it, or delete it (**মুছে ফেলুন**).
 
 ## Limits
 - Up to 10 generations per hour per account.
@@ -45,7 +45,7 @@ Open **History** to see all your posters, download them again, or delete them.
 ## Problems?
 | You see | Do this |
 |---|---|
-| "Generation failed" | Click **Retry** (counts as one regenerate). |
+| "পোস্টার তৈরি হয়নি" (Generation failed) | Click **আবার চেষ্টা করুন** (Retry) — counts as one regenerate. |
 | Sent back to the login page | Your session expired (7 days). Log in again. |
 | Photo rejected | Use JPG/PNG/WEBP under 5 MB. |
-| "Too many requests" | Wait a while and try again. |
+| "Too many posters this hour" | Wait a while and try again. |

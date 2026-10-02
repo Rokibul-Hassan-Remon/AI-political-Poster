@@ -25,6 +25,7 @@ export function UserMenu() {
     <div className="flex items-center gap-3">
       <span>স্বাগতম, {user.name}</span>
       <Link href="/templates" className="rounded bg-green-700 px-4 py-2 font-semibold text-white">টেমপ্লেট দেখুন</Link>
+      <Link href="/history" className="rounded border border-green-700 px-4 py-2 font-semibold text-green-700">আমার পোস্টার</Link>
       <button onClick={logout} className="rounded border border-neutral-300 px-3 py-1">লগআউট</button>
     </div>
   );

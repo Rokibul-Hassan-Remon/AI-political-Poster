@@ -10,7 +10,7 @@ Code wins over docs when they disagree — then fix the doc.
 | [auth](auth/) | register, login, JWT, roles | done |
 | [storage](storage/) | photo upload, Cloudinary | done |
 | [templates](templates/) | poster templates, seed script | done |
-| [posters](posters/) | poster request, status, history, regenerate, delete | planned |
+| [posters](posters/) | poster request, status, history, regenerate, delete | done (generation stubbed) |
 | [generation](generation/) | Gemini suggestion + Puppeteer render + export | planned |
 
 System overview: [architecture.md](architecture.md). Cross-cutting decisions: [decisions.md](decisions.md).

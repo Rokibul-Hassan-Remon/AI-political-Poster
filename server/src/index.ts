@@ -7,6 +7,8 @@ import { HttpError, errorHandler } from './middleware/error';
 import { authRouter } from './routes/auth';
 import { templatesRouter } from './routes/templates';
 import { uploadRouter } from './routes/upload';
+import { postersRouter } from './routes/posters';
+import { failStaleJobs } from './services/generation.service';
 
 const app = express();
 app.use(cors({ origin: env.CLIENT_URL }));
@@ -20,6 +22,7 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/templates', templatesRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/api/posters', postersRouter);
 
 app.use((_req, _res, next) => next(new HttpError(404, 'Not found')));
 app.use(errorHandler);
@@ -27,6 +30,7 @@ app.use(errorHandler);
 async function start() {
   await mongoose.connect(env.MONGODB_URI);
   console.log('MongoDB connected');
+  await failStaleJobs();
   app.listen(env.PORT, () => console.log(`Server on http://localhost:${env.PORT}`));
 }
 
