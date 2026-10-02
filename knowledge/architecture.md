@@ -4,15 +4,32 @@ One-page overview. Module details live in each module folder; the "why" lives in
 
 ## Big picture
 
-```
- Browser (Next.js, Vercel)                Server (Express, Render/Docker)                 External
-┌──────────────────────────┐   JSON +   ┌────────────────────────────────────┐
-│ /login /register         │   Bearer   │ routes/  auth · upload · templates │──────► MongoDB Atlas
-│ /templates               │ ─────────► │          posters                   │
-│ /create/[templateId]     │    JWT     │ middleware/ auth · error · limit   │──────► Cloudinary (photos, PNG, PDF)
-│ /posters/[id] (polling)  │ ◄───────── │ services/ generation ─► gemini ────│──────► Gemini (JSON suggestion only)
-│ /history                 │            │                      └► render ────│──────► Puppeteer (headless Chrome)
-└──────────────────────────┘            └────────────────────────────────────┘
+Hand-drawn board (system + poster flow): [system-design.excalidraw](diagrams/system-design.excalidraw) — open with the Obsidian Excalidraw plugin or excalidraw.com. Auth flow board: see [auth/architecture.md](auth/architecture.md).
+
+```mermaid
+flowchart LR
+  subgraph Browser["Browser — Next.js (Vercel)"]
+    P["/login /register<br/>/templates<br/>/create/[templateId]<br/>/posters/[id] (polling)<br/>/history"]
+    A["lib/api.ts<br/>access token + silent refresh"]
+    P --> A
+  end
+  subgraph Server["Server — Express (Render/Docker)"]
+    MW["middleware<br/>auth · error · limit"]
+    R["routes<br/>auth · upload · templates · posters"]
+    G["generation.service"]
+    MW --> R --> G
+  end
+  DB[("MongoDB Atlas")]
+  CL["Cloudinary<br/>photos · PNG · PDF"]
+  GM["Gemini<br/>JSON suggestion only"]
+  PP["Puppeteer<br/>headless Chrome"]
+  A -- "/api/* via Next rewrite<br/>Bearer JWT + refresh cookie" --> MW
+  R --> DB
+  R --> CL
+  G --> GM
+  G --> PP
+  G --> CL
+  G --> DB
 ```
 
 - The browser calls `/api/*` on the client origin; Next.js rewrites proxy it to `server/` (D7).
@@ -23,6 +40,33 @@ One-page overview. Module details live in each module folder; the "why" lives in
 `GET /api/health` → `{ status, db }` for uptime checks (Render) and local setup verification.
 
 ## Poster request flow
+
+```mermaid
+sequenceDiagram
+  participant C as Client
+  participant S as Server
+  participant CL as Cloudinary
+  participant DB as MongoDB
+  participant GM as Gemini
+  participant PP as Puppeteer
+  C->>S: POST /api/upload (1–3 photos)
+  S->>CL: upload
+  S-->>C: photo URLs
+  C->>S: POST /api/posters
+  S->>DB: Poster {status: generating}
+  S-->>C: {id} (returns immediately)
+  Note over S: background job (D4)
+  S->>GM: suggestion (15s timeout)
+  GM-->>S: JSON (or template default)
+  S->>PP: filled HTML
+  PP-->>S: PNG + PDF
+  S->>CL: upload outputs
+  S->>DB: status completed / failed
+  loop every 2s
+    C->>S: GET /api/posters/:id
+    S-->>C: status (+ file URLs when done)
+  end
+```
 
 1. Client uploads 1–3 photos → `POST /api/upload` → Cloudinary URLs.
 2. Client submits form → `POST /api/posters` → Poster saved with `status: generating` → response returns immediately.

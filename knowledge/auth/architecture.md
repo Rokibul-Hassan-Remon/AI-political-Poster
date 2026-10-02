@@ -9,6 +9,34 @@ Access token + refresh cookie (D7).
 
 Payload of both: `{ sub: userId, role }`. Refresh is not rotated or stored in the DB (MVP); logout only clears the cookie.
 
+## Flow
+
+Hand-drawn version: [auth-flow.excalidraw.md](../diagrams/auth-flow.excalidraw.md) (Obsidian Excalidraw plugin).
+
+```mermaid
+sequenceDiagram
+  participant B as Browser (lib/api.ts)
+  participant S as Express (via Next rewrite)
+  B->>S: POST /api/auth/login {email, password}
+  S-->>B: {accessToken, user} + Set-Cookie refreshToken (httpOnly, path=/api/auth)
+  Note over B: access token kept in memory only
+  B->>S: GET /api/... Authorization: Bearer access
+  S-->>B: 200
+  Note over B,S: access expires after 15 min
+  B->>S: GET /api/... (expired token)
+  S-->>B: 401
+  B->>S: POST /api/auth/refresh (cookie sent automatically)
+  alt cookie valid
+    S-->>B: new {accessToken, user}
+    B->>S: retry original request
+  else missing / invalid
+    S-->>B: 401
+    Note over B: redirect to /login
+  end
+  B->>S: POST /api/auth/logout
+  S-->>B: 204 + cookie cleared
+```
+
 ## Model `User`
 | field | type | notes |
 |---|---|---|
