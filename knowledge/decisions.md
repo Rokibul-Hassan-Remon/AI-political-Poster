@@ -17,5 +17,8 @@ Puppeteer needs Chromium + Bangla fonts + long requests; Vercel serverless is a 
 ## D5 — `GET /api/posters/me` instead of `/api/posters/user/:userId` (2026-10-02)
 Prevents IDOR; user id comes from the JWT.
 
-## D6 — JWT in `Authorization` header, stored in localStorage (2026-10-02)
+## D6 — JWT in `Authorization` header, stored in localStorage (2026-10-02) — superseded by D7
 Frontend and backend are on different domains; httpOnly cross-site cookies add CORS/SameSite complexity. Ceiling: XSS can read the token. Upgrade: httpOnly cookie behind a shared domain.
+
+## D7 — Access token in memory + refresh token in httpOnly cookie, via Next.js rewrite proxy (2026-10-03)
+Access JWT (15 min) returned in the body and kept in JS memory; refresh JWT (7 days) in an httpOnly, secure, sameSite=strict cookie scoped to `/api/auth`. XSS can no longer steal a long-lived token. Vercel and Render are different sites, so the client proxies `/api/*` to Express with `next.config.ts` rewrites — the cookie is first-party and CORS is unused by the browser. Ceiling: refresh tokens aren't rotated or revocable (logout only clears the cookie). Upgrade: `tokenVersion` on User, bumped on logout/password change.

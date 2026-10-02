@@ -7,7 +7,7 @@ Code wins over docs when they disagree — then fix the doc.
 
 | Module | Owns | Status |
 |---|---|---|
-| [auth](auth/) | register, login, JWT, roles | planned |
+| [auth](auth/) | register, login, JWT, roles | done |
 | [storage](storage/) | photo upload, Cloudinary | planned |
 | [templates](templates/) | poster templates, seed script | planned |
 | [posters](posters/) | poster request, status, history, regenerate, delete | planned |
@@ -26,7 +26,7 @@ Out (post-MVP): OTP, admin UI, moderation queue, analytics, bulk CSV, payments, 
 - **Validation:** `zod` at every request boundary (body, params, query).
 - **Errors:** throw → one error middleware → `{ "error": { "message": string } }` with correct HTTP status (400 validation, 401 no/invalid token, 403 not owner/admin, 404, 429, 500).
 - **Success responses:** return the resource directly (no `{ success, data }` wrapper).
-- **Auth:** `Authorization: Bearer <jwt>`. User id always from the token, never from URL/body.
+- **Auth:** `Authorization: Bearer <access jwt>` + httpOnly refresh cookie (D7). User id always from the token, never from URL/body.
 - **Config:** all secrets/URLs in `.env`, read once in `server/src/config/env.ts` (validated with zod). `.env.example` lists every key.
 - **Naming:** camelCase vars/fields, PascalCase models/components, kebab-case URLs, plural REST nouns.
 - **Bangla text:** user text is rendered exactly as typed. AI never rewrites name/designation/headline.

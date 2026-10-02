@@ -15,6 +15,7 @@ One-page overview. Module details live in each module folder; the "why" lives in
 └──────────────────────────┘            └────────────────────────────────────┘
 ```
 
+- The browser calls `/api/*` on the client origin; Next.js rewrites proxy it to `server/` (D7).
 - `client/` never talks to MongoDB, Cloudinary or Gemini directly — only to `server/` over REST.
 - Gemini returns a **JSON suggestion** (colors, photo order, headline size, slogan). It never draws the poster or rewrites user text (D1).
 - Puppeteer renders an HTML template with the user's exact Bangla text → PNG (2400×3200) + PDF.
@@ -32,7 +33,7 @@ One-page overview. Module details live in each module folder; the "why" lives in
 
 | Module | Owns | Code |
 |---|---|---|
-| [auth](auth/) | register, login, JWT, roles | `routes/auth.ts`, `middleware/auth.ts`, `models/User.ts` |
+| [auth](auth/) | register, login, refresh, logout, roles | `routes/auth.ts`, `middleware/auth.ts`, `models/User.ts` |
 | [storage](storage/) | photo + output upload | `routes/upload.ts`, `services/storage.service.ts` |
 | [templates](templates/) | template library, seed | `routes/templates.ts`, `models/Template.ts`, `templates/*.html`, `scripts/seed.ts` |
 | [posters](posters/) | request, status, history, regenerate, delete | `routes/posters.ts`, `models/Poster.ts` |
@@ -53,14 +54,14 @@ server/src/
 client/src/
   app/            pages (folder = URL)
   components/     reusable UI
-  lib/api.ts      single fetch helper (adds JWT, redirects to /login on 401)
+  lib/api.ts      single fetch helper (adds access token, silent refresh on 401, then /login)
 ```
 
 ## Deployment
 
 | Part | Host | Notes |
 |---|---|---|
-| client | Vercel | `NEXT_PUBLIC_API_URL` → server URL |
+| client | Vercel | `API_URL` → server URL; `/api/*` is proxied via rewrites (D7) |
 | server | Render (Docker) | Chromium + fonts in image (D3) |
 | database | MongoDB Atlas (M0) | |
 | files | Cloudinary | |

@@ -7,7 +7,8 @@
 ## Rules
 - Register with name, email, password. Email unique (case-insensitive).
 - Password min 8 chars.
-- Login returns a token valid for 7 days. No refresh token in MVP; expired → login again.
+- A login stays valid for 7 days (silently renewed every 15 min in the background); after that → login again.
+- Logout ends the session in that browser.
 - A user can only see/modify their own posters.
 - OTP / phone login: post-MVP.
 
