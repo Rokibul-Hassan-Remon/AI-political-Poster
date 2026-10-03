@@ -23,6 +23,9 @@ const SHAPES: [PhotoShape | "", string][] = [
   ["portrait", "লম্বা (৩:৪)"],
   ["landscape", "চওড়া (৪:৩)"],
 ];
+// Height per width of each shape, for the live preview (server: render.service SHAPE_CSS).
+const RATIO: Record<PhotoShape, number> = { circle: 1, square: 1, portrait: 4 / 3, landscape: 3 / 4 };
+const LAYER_PAD = 60; // transparent margin around each cut-out (server: render.service LAYER_PAD)
 const photoLabel = (key: string) => `ছবি ${"১২৩"[+key.slice(5)]}`;
 
 function useImage(src: string) {
@@ -39,6 +42,18 @@ type Item = NonNullable<Poster["layers"]>["items"][number];
 
 function Part({ item, move, onSelect, onChange }: { item: Item; move: LayoutEntry; onSelect: () => void; onChange: (m: LayoutEntry) => void }) {
   const img = useImage(item.url);
+  // Live shape preview: crop the cut-out to the shape's ratio around its center and round the corners.
+  // ponytail: approximate (crops the template's border too); saving re-cuts the layer with the real frame.
+  const shape = item.key.startsWith("photo") ? move.shape : undefined;
+  let [w, h, ox, oy] = [item.w, item.h, 0, 0];
+  if (shape) {
+    // Shape the photo itself, not the transparent padding around the cut-out.
+    // ponytail: assumes full padding; a photo touching the poster edge has less (server clamps it).
+    [w, h, ox, oy] = [w - 2 * LAYER_PAD, h - 2 * LAYER_PAD, LAYER_PAD, LAYER_PAD];
+    const r = RATIO[shape];
+    if (w * r <= h) [oy, h] = [oy + (h - w * r) / 2, w * r];
+    else [ox, w] = [ox + (w - h / r) / 2, h / r];
+  }
   // Read the node back after a drag/transform: position is relative to the part's place in the template.
   const save = (e: Konva.KonvaEventObject<Event>) => {
     const n = e.target;
@@ -50,8 +65,13 @@ function Part({ item, move, onSelect, onChange }: { item: Item; move: LayoutEntr
       image={img}
       x={item.x + move.dx}
       y={item.y + move.dy}
-      width={item.w}
-      height={item.h}
+      // Draw the cropped part at its place in the cut-out, but keep scaling/rotating around the cut-out corner like the server.
+      offsetX={-ox}
+      offsetY={-oy}
+      width={w}
+      height={h}
+      crop={shape && { x: ox, y: oy, width: w, height: h }}
+      cornerRadius={shape === "circle" ? w / 2 : shape ? 24 : 0}
       scaleX={move.scale}
       scaleY={move.scale}
       rotation={move.rotate}
@@ -156,7 +176,7 @@ export default function LayoutEditor({
         )}
       </div>
       <p className="text-sm text-gray-500">যেকোনো অংশ ধরে টেনে সরান। ক্লিক করলে কোণা টেনে বড়-ছোট আর ওপরের গোল বিন্দু দিয়ে ঘোরানো যাবে।</p>
-      {/* Photo shape / remove: like colors, the canvas shows a new shape only after saving (server re-cuts the layer). */}
+      {/* Photo shape / remove: the canvas previews the shape; saving re-cuts the layer with the template's real frame. */}
       {(selectedPhoto || hiddenPhotos.length > 0) && (
         <fieldset className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm">
           <legend className="px-1 font-semibold text-neutral-700">ছবি</legend>
@@ -199,7 +219,7 @@ export default function LayoutEditor({
               {photoLabel(key)} ফেরত আনুন
             </button>
           ))}
-          <p className="w-full text-xs text-neutral-500">নতুন আকৃতি সংরক্ষণ করার পর পোস্টারে দেখা যাবে।</p>
+          <p className="w-full text-xs text-neutral-500">এখানে আকৃতির আন্দাজ দেখা যাচ্ছে; ফ্রেমসহ আসল চেহারা সংরক্ষণ করার পর আসবে।</p>
         </fieldset>
       )}
       {/* Text colors: the canvas shows images of the last render, so a new color shows after saving. */}

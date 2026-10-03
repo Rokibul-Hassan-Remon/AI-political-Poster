@@ -42,11 +42,12 @@ function textColorCss(colors: RenderData['textColors'] = {}): string {
 export interface LayoutEntry { key: string; dx: number; dy: number; scale: number; rotate: number; shape?: PhotoShape; hidden?: boolean }
 export type PhotoShape = 'circle' | 'square' | 'portrait' | 'landscape';
 // Keeps the template's frame width; height follows the ratio. Inline style, so it beats the template's .photo rules.
+// align-self stops a flex row (e.g. campaign-bold) from stretching the height back to the tallest photo.
 const SHAPE_CSS: Record<PhotoShape, string> = {
-  circle: 'height:auto;aspect-ratio:1/1;border-radius:50%',
-  square: 'height:auto;aspect-ratio:1/1;border-radius:24px',
-  portrait: 'height:auto;aspect-ratio:3/4;border-radius:24px',
-  landscape: 'height:auto;aspect-ratio:4/3;border-radius:24px',
+  circle: 'height:auto;align-self:center;aspect-ratio:1/1;border-radius:50%',
+  square: 'height:auto;align-self:center;aspect-ratio:1/1;border-radius:24px',
+  portrait: 'height:auto;align-self:center;aspect-ratio:3/4;border-radius:24px',
+  landscape: 'height:auto;align-self:center;aspect-ratio:4/3;border-radius:24px',
 };
 // One movable part cut out of the poster (transparent PNG) + its box in poster px, for the client editor.
 export interface Layer { key: string; png: Buffer; x: number; y: number; w: number; h: number }

@@ -39,7 +39,7 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 2. Drag the headline, the name box or any photo anywhere on the poster.
 3. Click a part to select it: drag a corner to make it bigger or smaller, drag the round dot above it to rotate.
 4. Parts can overlap: select one and click **সামনে আনুন** (Bring to front) to put it on top.
-5. Select a photo and, under **ছবি** (Photo), pick its **আকৃতি** (shape): **গোল** (circle), **চৌকো** (square), **লম্বা** (tall 3:4), **চওড়া** (wide 4:3), or **টেমপ্লেটের ফ্রেম** (the template's own frame). Don't want a photo on the poster? Click **ছবিটি সরান** (Remove photo); **ছবি … ফেরত আনুন** (Bring back photo …) returns it. A new shape shows on the poster after you save.
+5. Select a photo and, under **ছবি** (Photo), pick its **আকৃতি** (shape): **গোল** (circle), **চৌকো** (square), **লম্বা** (tall 3:4), **চওড়া** (wide 4:3), or **টেমপ্লেটের ফ্রেম** (the template's own frame). Don't want a photo on the poster? Click **ছবিটি সরান** (Remove photo); **ছবি … ফেরত আনুন** (Bring back photo …) returns it. The editor shows a rough preview of the shape right away; the finished frame shows after you save.
 6. Under **লেখার রং** (Text color), pick your own color for **শিরোনাম** (headline), **নাম** (name) and **পদবি ও এলাকা** (designation and area). The ✕ next to a color goes back to the template's color. The new color shows on the poster after you save.
 7. Click **সংরক্ষণ করুন** (Save). The poster is made again with your layout, photo shapes and colors, and it does **not** use up a regenerate. **আগের মতো করুন** (Reset) puts every part back where the template had it, brings back removed photos and the template's frames and colors; **বাতিল** (Cancel) closes the editor without changes.
 
