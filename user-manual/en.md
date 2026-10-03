@@ -9,7 +9,7 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 
 ## 2. Choose a template
 1. Click **পোস্টার বানানো শুরু করুন** (Start making a poster) on the home page, or **টেমপ্লেট** (Templates) in the menu bar at the top of every page.
-2. Filter by occasion: Victory Day, National Days (21 February, 26 March), Mourning / Tribute (also 14 December and 25 March), Election Campaign, Greetings, Eid / Festival.
+2. Filter by occasion: Victory Day, National Days (21 February, 26 March), Mourning / Tribute (also 14 December and 25 March), Election Campaign, Greetings, Eid / Festival (Eid, Pohela Boishakh, Durga Puja, Buddha Purnima, Christmas).
    - Don't like any design? Click the **নিজের টেমপ্লেট দিয়ে পোস্টার বানান** (Make a poster with your own template) card, the last one after all the ready-made templates: you upload your own background image (an upright 3:4 image such as 1200×1600 fits best; other sizes are cropped at the edges). Your text and photos go on top, and after the poster is made you can place them anywhere with **লেআউট সম্পাদনা** (see section 5).
 3. Each card shows a preview of the finished poster, its occasion and how many photos it takes (1–3). Click the one you like.
 

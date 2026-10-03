@@ -108,6 +108,50 @@ const templates: Omit<TemplateData, 'createdAt' | 'updatedAt' | 'isActive' | 'th
     },
   },
   {
+    title: 'পহেলা বৈশাখ',
+    slug: 'pohela-boishakh',
+    occasionType: 'festival',
+    layoutConfig: {
+      photoSlots: 2,
+      defaultScheme: { primary: '#FFF8EC', secondary: '#C8102E', accent: '#E8A317', text: '#5A0E0E' },
+      headlineDefault: 'শুভ নববর্ষ',
+      customBackground: false,
+    },
+  },
+  {
+    title: 'শারদীয় দুর্গাপূজা',
+    slug: 'durga-puja',
+    occasionType: 'festival',
+    layoutConfig: {
+      photoSlots: 2,
+      defaultScheme: { primary: '#5C0A0A', secondary: '#B3360C', accent: '#FFC72C', text: '#FFF4D6' },
+      headlineDefault: 'শুভ শারদীয় দুর্গোৎসব',
+      customBackground: false,
+    },
+  },
+  {
+    title: 'শুভ বুদ্ধপূর্ণিমা',
+    slug: 'buddha-purnima',
+    occasionType: 'festival',
+    layoutConfig: {
+      photoSlots: 2,
+      defaultScheme: { primary: '#0E1A3A', secondary: '#2B4278', accent: '#F5D76E', text: '#FFFFFF' },
+      headlineDefault: 'শুভ বুদ্ধপূর্ণিমা',
+      customBackground: false,
+    },
+  },
+  {
+    title: 'শুভ বড়দিন',
+    slug: 'christmas',
+    occasionType: 'festival',
+    layoutConfig: {
+      photoSlots: 2,
+      defaultScheme: { primary: '#8B1020', secondary: '#0F5132', accent: '#F2C94C', text: '#FFFFFF' },
+      headlineDefault: 'শুভ বড়দিন',
+      customBackground: false,
+    },
+  },
+  {
     title: 'নিজের ডিজাইন',
     slug: 'own-design',
     occasionType: 'custom',

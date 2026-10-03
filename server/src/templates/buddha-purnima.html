@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<style>
+{{fonts}}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1200px; height: 1600px; overflow: hidden; }
+body {
+  font-family: 'Hind Siliguri', sans-serif; color: {{text}};
+  background: linear-gradient(180deg, {{primary}} 0%, {{secondary}} 100%);
+  display: flex; flex-direction: column; align-items: center; padding: 60px 60px 50px; text-align: center; position: relative;
+}
+/* Full moon with a soft halo, top right. */
+.moon { position: absolute; top: 60px; right: 80px; width: 200px; height: 200px; border-radius: 50%; background: {{accent}}; box-shadow: 0 0 60px 20px {{accent}}66; }
+/* Lotus petals along the bottom edge. */
+body::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 60px;
+  background: radial-gradient(ellipse 50px 60px at 50% 100%, {{accent}}88 98%, transparent 100%) 0 0 / 100px 60px repeat-x; }
+.headline { position: relative; font-weight: 700; line-height: 1.25; color: {{accent}}; text-shadow: 0 6px 18px rgba(0,0,0,.45); margin-top: 180px; }
+.lg { font-size: 96px; } .xl { font-size: 120px; } .\32xl { font-size: 144px; }
+.photos { flex: 1; display: flex; gap: 36px; align-items: center; justify-content: center; width: 100%; margin: 30px 0; }
+.photo { width: 320px; height: 420px; object-fit: cover; border: 8px solid {{accent}}; border-radius: 160px 160px 24px 24px; box-shadow: 0 0 40px {{accent}}55; }
+.n1 .photo { width: 500px; height: 620px; border-radius: 250px 250px 24px 24px; }
+.n2 .photo { width: 420px; height: 540px; border-radius: 210px 210px 24px 24px; }
+.footer { width: 100%; padding: 20px 40px 50px; }
+.name { font-size: 76px; font-weight: 700; line-height: 1.2; color: {{accent}}; }
+.meta { font-size: 40px; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <div class="moon"></div>
+  <h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1>
+  <div class="photos n{{photoCount}}">{{photos}}</div>
+  <div class="footer" data-layer="info">
+    <div class="name">{{name}}</div>
+    <div class="meta">{{designation}}, {{organization}}</div>
+    <div class="meta">{{area}}</div>
+  </div>
+</body>
+</html>
