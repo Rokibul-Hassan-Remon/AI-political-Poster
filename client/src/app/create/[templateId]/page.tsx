@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { PosterFields, readPosterText, type Poster } from "../../poster-fields";
 
-type Template = { _id: string; title: string; layoutConfig: { photoSlots: number; headlineDefault: string; customBackground?: boolean } };
+type Template = { _id: string; title: string; thumbnailUrl?: string; layoutConfig: { photoSlots: number; headlineDefault: string; customBackground?: boolean } };
 // x, y: focal point in % (object-position); zoom 1–3. The server renders the same crop (render.service adjustStyle).
 type Photo = { file: File; url: string; x: number; y: number; zoom: number };
 
@@ -107,8 +107,24 @@ export default function CreatePage() {
 
   return (
     <main className="mx-auto w-full max-w-xl p-6">
-      <Link href="/templates" className="text-sm font-semibold text-green-700 hover:underline">← সব টেমপ্লেট</Link>
-      <h1 className="mb-4 mt-1 text-3xl font-bold text-green-700">{template.title}</h1>
+      {/* Chosen design at a glance, with a clear way to pick another. */}
+      <div className="mb-6 flex items-center gap-4 rounded-2xl border border-neutral-200 bg-neutral-50 p-3 shadow-sm">
+        {template.thumbnailUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={template.thumbnailUrl} alt="" className="aspect-3/4 w-16 shrink-0 rounded-lg border object-cover" />
+        )}
+        <div className="min-w-0 flex-1">
+          <p className="text-sm text-neutral-500">নির্বাচিত টেমপ্লেট</p>
+          <h1 className="text-2xl font-bold text-green-700">{template.title}</h1>
+        </div>
+        <Link href="/templates" className="flex shrink-0 items-center gap-1.5 rounded-lg border border-green-700 px-3 py-2 text-sm font-semibold text-green-700 hover:bg-green-50">
+          {/* Two arrows: swap the template. */}
+          <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7" />
+          </svg>
+          বদলান
+        </Link>
+      </div>
       <form onSubmit={submit} className="flex flex-col gap-4">
         <PosterFields headlinePlaceholder={template.layoutConfig.headlineDefault} />
         {template.layoutConfig.customBackground && (

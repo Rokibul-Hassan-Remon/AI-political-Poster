@@ -171,11 +171,22 @@ const SAMPLE_BACKGROUND =
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600"><defs><linearGradient id="g" x2="1" y2="1"><stop offset="0" stop-color="#5b6b8c"/><stop offset="1" stop-color="#2b3247"/></linearGradient></defs><rect width="1200" height="1600" fill="url(#g)"/><path d="M0 1300 L1200 1000 V1600 H0z" fill="#ffffff22"/></svg>',
   );
 
-// Grey head-and-shoulders silhouette standing in for leader photos on the thumbnails.
+// Flat illustrated leader (panjabi + vest) standing in for leader photos on the thumbnails.
 const SAMPLE_PHOTO =
   'data:image/svg+xml;utf8,' +
   encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400"><rect width="300" height="400" fill="#cfcfcf"/><circle cx="150" cy="150" r="70" fill="#8a8a8a"/><path d="M30 400c0-90 55-150 120-150s120 60 120 150z" fill="#8a8a8a"/></svg>',
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400"><defs><linearGradient id="b" x2="0" y2="1"><stop offset="0" stop-color="#e9eef3"/><stop offset="1" stop-color="#b8c4d0"/></linearGradient></defs>' +
+      '<rect width="300" height="400" fill="url(#b)"/>' +
+      '<path d="M20 400c4-80 50-118 130-124 80 6 126 44 130 124z" fill="#f7f5ef"/>' +
+      '<path d="M20 400c4-80 50-118 104-123l26 90 26-90c54 5 100 43 104 123z" fill="#2e3a4f"/>' +
+      '<path d="M128 262h44v30l-22 26-22-26z" fill="#c4865c"/>' +
+      '<ellipse cx="94" cy="178" rx="11" ry="18" fill="#c4865c"/><ellipse cx="206" cy="178" rx="11" ry="18" fill="#c4865c"/>' +
+      '<ellipse cx="150" cy="150" rx="60" ry="64" fill="#1d1a19"/><ellipse cx="150" cy="176" rx="56" ry="70" fill="#d69a6e"/>' +
+      '<path d="M92 170c-6-58 22-84 58-84s64 26 58 84c-6-26-14-44-24-50-22 12-58 14-80 4-6 14-10 30-12 46z" fill="#1d1a19"/>' +
+      '<path d="M120 166h20M160 166h20" stroke="#1d1a19" stroke-width="5" stroke-linecap="round"/>' +
+      '<circle cx="130" cy="180" r="5" fill="#1d1a19"/><circle cx="170" cy="180" r="5" fill="#1d1a19"/>' +
+      '<path d="M128 214c10-8 34-8 44 0-6 4-14 4-22 2-8 2-16 2-22-2z" fill="#1d1a19"/>' +
+      '<path d="M136 224q14 10 28 0" stroke="#8a4b33" stroke-width="4" fill="none" stroke-linecap="round"/></svg>',
   );
 
 // Renders the real HTML template with sample data so the gallery shows what the poster actually looks like.

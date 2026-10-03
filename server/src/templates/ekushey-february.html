@@ -8,12 +8,15 @@
 html, body { width: 1200px; height: 1600px; overflow: hidden; }
 body {
   font-family: 'Hind Siliguri', sans-serif; color: {{text}};
-  background: linear-gradient(180deg, {{primary}} 0%, {{secondary}} 100%);
-  display: flex; flex-direction: column; align-items: center; padding: 60px 60px 50px; text-align: center;
+  background: radial-gradient(ellipse 800px 600px at 50% 12%, {{accent}}40, transparent 70%), linear-gradient(180deg, {{primary}} 0%, {{secondary}} 100%);
+  display: flex; flex-direction: column; align-items: center; padding: 56px 60px 56px; text-align: center; position: relative;
 }
+/* Decorations sit at z-index -1, behind every movable part. */
+/* Faint Bangla letters filling the background: the language the day honours. */
+.letters { position: absolute; z-index: -1; inset: -40px; font-size: 120px; font-weight: 700; line-height: 1.3; letter-spacing: 30px; color: #ffffff0c; word-break: break-all; transform: rotate(-12deg); }
 /* Shaheed Minar: red sun behind five white pillars, the middle one bowing forward at the top. */
 .minar { position: relative; width: 520px; height: 230px; flex-shrink: 0; }
-.sun { position: absolute; left: 50%; bottom: 40px; width: 210px; height: 210px; margin-left: -105px; border-radius: 50%; background: {{accent}}; }
+.sun { position: absolute; left: 50%; bottom: 40px; width: 220px; height: 220px; margin-left: -110px; border-radius: 50%; background: {{accent}}; box-shadow: 0 0 80px 10px {{accent}}88; }
 .pillars { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center; gap: 22px; }
 .pillars i { width: 34px; background: #fff; display: block; }
 .pillars .p1 { height: 110px; } .pillars .p2 { height: 150px; }
@@ -21,18 +24,20 @@ body {
 .pillars .p3 { position: relative; width: 130px; height: 200px; background: linear-gradient(90deg, #fff 0 16px, transparent 16px 49px, #fff 49px 65px, transparent 65px 81px, #fff 81px 97px, transparent 97px 114px, #fff 114px); }
 .pillars .p3::before { content: ''; position: absolute; left: -10px; right: -10px; top: -26px; height: 40px; background: #fff; transform: perspective(200px) rotateX(35deg); transform-origin: bottom; }
 .base { position: absolute; left: 30px; right: 30px; bottom: -10px; height: 14px; background: #fff; }
-.headline { font-weight: 700; line-height: 1.25; margin-top: 40px; }
-.lg { font-size: 90px; } .xl { font-size: 112px; } .\32xl { font-size: 136px; }
-.photos { flex: 1; display: flex; gap: 40px; align-items: center; justify-content: center; width: 100%; margin: 30px 0; }
-.photo { width: 330px; height: 420px; object-fit: cover; border: 10px solid #fff; outline: 4px solid {{accent}}; outline-offset: 6px; }
-.n1 .photo { width: 520px; height: 640px; }
-.n2 .photo { width: 420px; height: 530px; }
-.footer { width: 100%; border-top: 8px solid {{accent}}; padding-top: 28px; }
-.name { font-size: 72px; font-weight: 700; line-height: 1.2; }
-.meta { font-size: 40px; line-height: 1.4; opacity: .9; }
+.headline { font-weight: 700; line-height: 1.2; margin-top: 44px; -webkit-text-stroke: 5px {{primary}}; paint-order: stroke fill; text-shadow: 0 5px 0 {{accent}}, 0 16px 34px rgba(0,0,0,.6); }
+.lg { font-size: 94px; } .xl { font-size: 116px; } .\32xl { font-size: 140px; }
+.photos { flex: 1; display: flex; gap: 44px; align-items: center; justify-content: center; width: 100%; margin: 30px 0; }
+.photo { width: 340px; height: 440px; object-fit: cover; border: 10px solid #fff; outline: 4px solid {{accent}}; outline-offset: 8px; box-shadow: 0 30px 60px rgba(0,0,0,.6); }
+.n1 .photo { width: 560px; height: 700px; }
+.n2 .photo { width: 450px; height: 580px; }
+.n3 .photo { width: 290px; height: 380px; } .n3 .main { width: 360px; height: 470px; }
+.footer { width: 100%; border-top: 8px solid {{accent}}; padding-top: 28px; background: linear-gradient(180deg, {{accent}}26, transparent 70%); }
+.name { font-size: 80px; font-weight: 700; line-height: 1.2; }
+.meta { font-size: 42px; line-height: 1.4; opacity: .9; }
 </style>
 </head>
 <body>
+  <div class="letters">অআইঈউঊঋএঐওঔকখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহড়ঢ়য়ৎংঃঁঅআইঈউঊঋএঐওঔকখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহ</div>
   <div class="minar">
     <div class="sun"></div>
     <div class="pillars"><i class="p1"></i><i class="p2"></i><i class="p3"></i><i class="p2"></i><i class="p1"></i></div>

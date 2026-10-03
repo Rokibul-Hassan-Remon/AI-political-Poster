@@ -6,28 +6,43 @@
 {{fonts}}
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 1200px; height: 1600px; overflow: hidden; }
-body { font-family: 'Hind Siliguri', sans-serif; background: {{secondary}}; color: {{text}}; display: flex; flex-direction: column; }
-/* The slanted band is a ::before behind the headline, so a moved headline is not clipped with it. */
-.top { position: relative; color: {{secondary}}; padding: 70px 60px 140px; text-align: center; }
-.top::before { content: ''; position: absolute; inset: 0; z-index: -1; background: {{primary}}; clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%); }
-.headline { font-weight: 700; line-height: 1.25; }
-.lg { font-size: 96px; } .xl { font-size: 120px; } .\32xl { font-size: 144px; }
-.photos { position: relative; display: flex; justify-content: center; margin-top: -110px; }
-.photo { width: 640px; height: 760px; object-fit: cover; border: 16px solid {{secondary}}; outline: 10px solid {{accent}}; border-radius: 32px; }
-.bottom { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px 60px 60px; }
-.name { font-size: 84px; font-weight: 700; line-height: 1.2; color: {{primary}}; }
-.meta { font-size: 42px; line-height: 1.4; }
-.bar { margin-top: 24px; background: {{accent}}; color: #fff; font-size: 40px; font-weight: 700; padding: 12px 48px; border-radius: 999px; }
+body { font-family: 'Hind Siliguri', sans-serif; background: {{secondary}}; color: {{text}}; display: flex; flex-direction: column; position: relative; }
+/* Decorations sit at z-index -1, behind every movable part. */
+/* Soft rays behind the photo. */
+.rays { position: absolute; z-index: -1; left: 50%; top: 820px; width: 2000px; height: 2000px; margin: -1000px 0 0 -1000px;
+  background: repeating-conic-gradient({{primary}}14 0 5deg, transparent 5deg 10deg);
+  -webkit-mask-image: radial-gradient(circle, #000 10%, transparent 50%); mask-image: radial-gradient(circle, #000 10%, transparent 50%); }
+/* Slanted headline band (with a thin accent stripe under it) and a matching band at the bottom. */
+.band { position: absolute; z-index: -1; left: 0; right: 0; top: 0; height: 470px; background: linear-gradient(135deg, #ffffff1a 0 25%, transparent 25% 50%, #ffffff1a 50% 75%, transparent 75%) 0 0 / 40px 40px, {{primary}};
+  clip-path: polygon(0 0, 100% 0, 100% 74%, 0 100%); }
+.stripe { position: absolute; z-index: -1; left: 0; right: 0; top: 0; height: 500px; background: {{accent}}; clip-path: polygon(0 94%, 100% 68%, 100% 74%, 0 100%); }
+.base { position: absolute; z-index: -1; left: 0; right: 0; bottom: 0; height: 120px; background: {{primary}}; clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%); }
+.top { color: {{secondary}}; padding: 64px 60px 120px; text-align: center; }
+.headline { font-weight: 700; line-height: 1.2; -webkit-text-stroke: 6px {{primary}}; paint-order: stroke fill; text-shadow: 0 6px 0 {{accent}}, 0 16px 30px rgba(0,0,0,.35); }
+.lg { font-size: 100px; } .xl { font-size: 124px; } .\32xl { font-size: 148px; }
+.photos { display: flex; gap: 30px; justify-content: center; margin-top: -90px; }
+.photo { width: 640px; height: 780px; object-fit: cover; border: 16px solid {{secondary}}; outline: 10px solid {{accent}}; border-radius: 36px; box-shadow: 0 30px 60px rgba(0,0,0,.35); }
+.photo:not(.main) { width: 300px; height: 400px; align-self: flex-end; }
+.n2 .main { width: 540px; height: 680px; }
+.n3 .main { width: 440px; height: 580px; } .n3 .photo:not(.main) { width: 280px; height: 370px; }
+.bottom { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px 60px 130px; }
+.name { font-size: 90px; font-weight: 700; line-height: 1.15; color: {{primary}}; }
+.meta { font-size: 44px; line-height: 1.4; }
+.bar { margin-top: 18px; background: {{accent}}; color: #fff; font-size: 42px; font-weight: 700; padding: 10px 56px; border-radius: 999px; box-shadow: 0 10px 24px {{accent}}66; }
 .bar:empty { display: none; }
 </style>
 </head>
 <body>
+  <div class="rays"></div>
+  <div class="stripe"></div>
+  <div class="band"></div>
+  <div class="base"></div>
   <div class="top"><h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1></div>
-  <div class="photos">{{photos}}</div>
+  <div class="photos n{{photoCount}}">{{photos}}</div>
   <div class="bottom" data-layer="info">
     <div class="name">{{name}}</div>
     <div class="meta">{{designation}}, {{organization}}</div>
-    <div class="bar">{{area}}</div>
+    <div class="meta bar">{{area}}</div>
   </div>
 </body>
 </html>

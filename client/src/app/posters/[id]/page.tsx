@@ -71,7 +71,6 @@ export default function PosterPage() {
           <div className="flex aspect-3/4 w-full flex-col items-center justify-center gap-4 rounded-xl border border-neutral-200 bg-neutral-50 p-6 text-center">
             <span className="h-12 w-12 animate-spin rounded-full border-4 border-green-700 border-t-transparent" />
             <p className="text-xl font-semibold text-green-800">পোস্টার তৈরি হচ্ছে…</p>
-            <p className="text-neutral-600">সাধারণত এক মিনিটের কম লাগে। পেজটি খোলা রাখুন, তৈরি হলেই এখানে দেখাবে।</p>
           </div>
         )}
         {poster.status === "failed" && (
@@ -84,36 +83,37 @@ export default function PosterPage() {
           <LayoutEditor poster={poster} onSave={saveLayout} onCancel={() => setEditing(false)} />
         )}
         {poster.status === "completed" && !editing && (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={poster.generatedImageUrl} alt="পোস্টার" className="w-full rounded-xl border shadow-lg" />
-            <div className="mt-3 flex flex-wrap gap-3">
-              <a href={download(poster.generatedImageUrl)} className="flex items-center gap-2 rounded bg-green-700 px-4 py-2 font-semibold text-white hover:bg-green-800">
+          <div className="relative">
+            {/* Actions float over the top of the poster (z-10), so they are seen first without scrolling. */}
+            <div className="absolute inset-x-2 top-2 z-10 flex flex-wrap justify-center gap-1.5 rounded-xl bg-black/45 p-1.5 shadow-lg backdrop-blur-sm">
+              <a href={download(poster.generatedImageUrl)} className="flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-green-700 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-green-800">
                 {/* Picture with a down arrow: download the image. */}
-                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 3v12M7 10l5 5 5-5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
                 </svg>
                 PNG ডাউনলোড
               </a>
-              <a href={download(poster.generatedPdfUrl)} className="flex items-center gap-2 rounded border border-green-700 px-4 py-2 font-semibold text-green-700 hover:bg-green-50">
+              <a href={download(poster.generatedPdfUrl)} className="flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-white px-2.5 py-1.5 text-xs font-semibold text-green-800 hover:bg-green-50">
                 {/* Document with folded corner. */}
-                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
                   <path d="M14 3v5h5M12 11v6M9.5 14.5 12 17l2.5-2.5" />
                 </svg>
                 PDF ডাউনলোড
               </a>
               {poster.layers && (
-                <button onClick={() => setEditing(true)} className="flex items-center gap-2 rounded border border-green-700 px-4 py-2 font-semibold text-green-700 hover:bg-green-50">
+                <button onClick={() => setEditing(true)} className="flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-white px-2.5 py-1.5 text-xs font-semibold text-green-800 hover:bg-green-50">
                   {/* Pencil: edit the layout. */}
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" />
                   </svg>
                   লেআউট সম্পাদনা
                 </button>
               )}
             </div>
-          </>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={poster.generatedImageUrl} alt="পোস্টার" className="w-full rounded-xl border shadow-lg" />
+          </div>
         )}
       </section>
 

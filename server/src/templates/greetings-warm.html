@@ -7,23 +7,33 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 1200px; height: 1600px; overflow: hidden; }
 body {
-  font-family: 'Hind Siliguri', sans-serif; color: {{text}}; background: {{secondary}};
-  display: flex; flex-direction: column; align-items: center; text-align: center;
-  border: 18px solid {{primary}}; outline: 6px solid {{accent}}; outline-offset: -30px;
+  font-family: 'Hind Siliguri', sans-serif; color: {{text}};
+  background: radial-gradient(circle, {{accent}}26 2px, transparent 3px) 0 0 / 46px 46px, radial-gradient(ellipse at 50% 55%, #ffffff 0%, {{secondary}} 70%);
+  display: flex; flex-direction: column; align-items: center; text-align: center; position: relative;
+  border: 18px solid {{primary}}; outline: 5px solid {{accent}}; outline-offset: -32px;
 }
-.band { width: 100%; background: {{primary}}; color: {{secondary}}; padding: 60px 50px 70px; border-bottom: 12px solid {{accent}}; border-radius: 0 0 50% 50% / 0 0 80px 80px; }
-.headline { font-weight: 700; line-height: 1.25; }
-.lg { font-size: 96px; } .xl { font-size: 120px; } .\32xl { font-size: 144px; }
-.photos { flex: 1; display: flex; gap: 36px; align-items: center; justify-content: center; width: 100%; padding: 30px 50px; }
-.photo { width: 320px; height: 320px; object-fit: cover; border-radius: 50%; border: 12px solid {{accent}}; box-shadow: 0 0 0 8px {{primary}}, 0 16px 40px rgba(0,0,0,.3); }
-.n1 .photo { width: 600px; height: 600px; }
-.n2 .photo { width: 440px; height: 440px; }
-.footer { width: calc(100% - 100px); margin-bottom: 60px; background: {{primary}}; color: {{secondary}}; border-radius: 24px; padding: 28px 40px; }
-.name { font-size: 76px; font-weight: 700; line-height: 1.2; color: {{accent}}; }
-.meta { font-size: 40px; line-height: 1.4; }
+/* Decorations sit at z-index -1, behind every movable part. */
+/* Gold halo behind the photos. */
+.halo { position: absolute; z-index: -1; left: 50%; top: 780px; width: 980px; height: 980px; margin: -490px 0 0 -490px; border-radius: 50%;
+  background: repeating-radial-gradient(circle, transparent 0 36px, {{accent}}30 37px 40px);
+  -webkit-mask-image: radial-gradient(circle, #000 40%, transparent 70%); mask-image: radial-gradient(circle, #000 40%, transparent 70%); }
+.band { width: 100%; background: linear-gradient(180deg, #ffffff1f, transparent), {{primary}}; color: {{secondary}}; padding: 64px 50px 76px;
+  border-bottom: 12px solid {{accent}}; border-radius: 0 0 50% 50% / 0 0 90px 90px; box-shadow: 0 14px 30px rgba(0,0,0,.25); }
+.headline { font-weight: 700; line-height: 1.2; text-shadow: 0 5px 0 {{accent}}, 0 14px 30px rgba(0,0,0,.4); }
+.lg { font-size: 100px; } .xl { font-size: 124px; } .\32xl { font-size: 148px; }
+.photos { flex: 1; display: flex; gap: 40px; align-items: center; justify-content: center; width: 100%; padding: 30px 50px; }
+.photo { width: 330px; height: 330px; object-fit: cover; border-radius: 50%; border: 14px solid {{accent}}; box-shadow: 0 0 0 8px {{primary}}, 0 0 0 13px {{accent}}, 0 24px 50px rgba(0,0,0,.35); }
+.n1 .photo { width: 620px; height: 620px; }
+.n2 .photo { width: 470px; height: 470px; }
+.n3 .main { width: 400px; height: 400px; }
+.footer { position: relative; width: calc(100% - 110px); margin-bottom: 70px; background: linear-gradient(180deg, #ffffff1f, transparent), {{primary}}; color: {{secondary}};
+  border-radius: 28px; padding: 30px 40px; box-shadow: 0 18px 40px rgba(0,0,0,.3), inset 0 0 0 4px {{primary}}, inset 0 0 0 7px {{accent}}; }
+.name { font-size: 84px; font-weight: 700; line-height: 1.2; color: {{accent}}; }
+.meta { font-size: 42px; line-height: 1.4; }
 </style>
 </head>
 <body>
+  <div class="halo"></div>
   <div class="band"><h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1></div>
   <div class="photos n{{photoCount}}">{{photos}}</div>
   <div class="footer" data-layer="info">
