@@ -18,7 +18,7 @@ const posterSchema = new Schema(
     // One per photo, same order: focal point (x, y in %) + zoom, set by the user on the form.
     photoAdjust: { type: [{ _id: false, x: Number, y: Number, zoom: Number }], default: undefined },
     // Canvas editor: per [data-layer] move/scale/rotate, applied at render (render.service).
-    layout: { type: [{ _id: false, key: String, dx: Number, dy: Number, scale: Number, rotate: Number }], default: undefined },
+    layout: { type: [{ _id: false, key: String, dx: Number, dy: Number, scale: Number, rotate: Number, shape: String, hidden: Boolean }], default: undefined },
     // User-picked text colors per section (#rrggbb); a missing key keeps the template/AI color.
     textColors: { type: { _id: false, headline: String, name: String, meta: String }, default: undefined },
     // Cut-outs from the last render that the editor drags around: background JPEG + one PNG per layer.

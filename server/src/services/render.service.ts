@@ -38,7 +38,16 @@ function textColorCss(colors: RenderData['textColors'] = {}): string {
 }
 
 // User's move/scale/rotate of one [data-layer] element, relative to where the template puts it.
-export interface LayoutEntry { key: string; dx: number; dy: number; scale: number; rotate: number }
+// shape (photos only) replaces the template's frame; hidden hides the part but keeps its slot, so other moves stay put.
+export interface LayoutEntry { key: string; dx: number; dy: number; scale: number; rotate: number; shape?: PhotoShape; hidden?: boolean }
+export type PhotoShape = 'circle' | 'square' | 'portrait' | 'landscape';
+// Keeps the template's frame width; height follows the ratio. Inline style, so it beats the template's .photo rules.
+const SHAPE_CSS: Record<PhotoShape, string> = {
+  circle: 'height:auto;aspect-ratio:1/1;border-radius:50%',
+  square: 'height:auto;aspect-ratio:1/1;border-radius:24px',
+  portrait: 'height:auto;aspect-ratio:3/4;border-radius:24px',
+  landscape: 'height:auto;aspect-ratio:4/3;border-radius:24px',
+};
 // One movable part cut out of the poster (transparent PNG) + its box in poster px, for the client editor.
 export interface Layer { key: string; png: Buffer; x: number; y: number; w: number; h: number }
 
@@ -58,12 +67,16 @@ function adjustStyle(a: NonNullable<RenderData['photoAdjust']>[number] | undefin
   const x = clamp(a.x, 0, 100, 50), y = clamp(a.y, 0, 100, 50), zoom = clamp(a.zoom, 1, 3, 1);
   const k = 1 - 1 / zoom; // share of each axis cropped away
   const r = (n: number) => +n.toFixed(2);
-  return ` style="object-position:${x}% ${y}%;object-view-box:inset(${r(k * y)}% ${r(k * (100 - x))}% ${r(k * (100 - y))}% ${r(k * x)}%)"`;
+  return `object-position:${x}% ${y}%;object-view-box:inset(${r(k * y)}% ${r(k * (100 - x))}% ${r(k * (100 - y))}% ${r(k * x)}%)`;
 }
 
 // photoUrls[0] is the user's main photo: tagged `.main` and, with 3 photos, moved to the middle.
-function photoTags(urls: string[], adjust: RenderData['photoAdjust'] = []): string {
-  const tags = urls.map((u, i) => `<img data-layer="photo${i}" class="photo${i === 0 ? ' main' : ''}" src="${escapeHtml(u)}"${adjustStyle(adjust[i])} alt="">`);
+function photoTags(urls: string[], adjust: RenderData['photoAdjust'] = [], layout: LayoutEntry[] = []): string {
+  const tags = urls.map((u, i) => {
+    const shape = layout.find((l) => l.key === `photo${i}`)?.shape;
+    const style = [adjustStyle(adjust[i]), shape && SHAPE_CSS[shape]].filter(Boolean).join(';');
+    return `<img data-layer="photo${i}" class="photo${i === 0 ? ' main' : ''}" src="${escapeHtml(u)}"${style && ` style="${style}"`} alt="">`;
+  });
   return (tags.length === 3 ? [tags[1], tags[0], tags[2]] : tags).join('');
 }
 
@@ -71,7 +84,7 @@ function photoTags(urls: string[], adjust: RenderData['photoAdjust'] = []): stri
 export function fillTemplate(html: string, d: RenderData): string {
   const vars: Record<string, string> = {
     fonts: FONTS_CSS,
-    photos: photoTags(d.photoUrls, d.photoAdjust),
+    photos: photoTags(d.photoUrls, d.photoAdjust, d.layout),
     photoCount: String(d.photoUrls.length),
     headlineSize: d.headlineSize,
     ...d.scheme, // hex colors, validated by the Template model / Gemini zod schema
@@ -166,6 +179,7 @@ export async function render(
             el.style.transform = `translate(${l.dx}px,${l.dy}px) rotate(${l.rotate}deg) scale(${l.scale})`;
             if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
             el.style.zIndex = String(i + 1);
+            if (l.hidden) el.style.visibility = 'hidden';
           }
         },
         clips,

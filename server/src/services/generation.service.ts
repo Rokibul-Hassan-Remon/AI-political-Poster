@@ -2,7 +2,7 @@ import { GenerationLog } from '../models/GenerationLog';
 import { Poster } from '../models/Poster';
 import { Template } from '../models/Template';
 import { suggest, suggestionSchema, type Suggestion } from './gemini.service';
-import { render } from './render.service';
+import { render, type PhotoShape } from './render.service';
 import { uploadBuffer } from './storage.service';
 
 // Used when Gemini is off or fails: template colors, size by headline length.
@@ -56,7 +56,11 @@ export async function run(posterId: string, { keepSuggestion = false } = {}): Pr
       photoAdjust: poster.photoAdjust ?? undefined,
       backgroundUrl: poster.backgroundUrl ?? undefined,
       textColors: poster.textColors ?? undefined,
-      layout: poster.layout?.map((l) => ({ key: l.key!, dx: l.dx!, dy: l.dy!, scale: l.scale!, rotate: l.rotate! })),
+      layout: poster.layout?.map((l) => ({
+        key: l.key!, dx: l.dx!, dy: l.dy!, scale: l.scale!, rotate: l.rotate!,
+        shape: (l.shape ?? undefined) as PhotoShape | undefined, // zod-checked in the layout route
+        hidden: l.hidden ?? undefined,
+      })),
     });
     const folder = `rise-together/posters/${poster.userId}`;
     // ponytail: layer files of earlier renders stay in Cloudinary, like the old PNG/PDF.

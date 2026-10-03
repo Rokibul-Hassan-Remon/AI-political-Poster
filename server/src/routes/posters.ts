@@ -39,6 +39,8 @@ const layoutBody = z.object({
         dy: z.number().min(-1600).max(1600),
         scale: z.number().min(0.2).max(4),
         rotate: z.number().min(-180).max(180),
+        shape: z.enum(['circle', 'square', 'portrait', 'landscape']).optional(), // photos only; missing → template frame
+        hidden: z.boolean().optional(),
       }),
     )
     .max(5),

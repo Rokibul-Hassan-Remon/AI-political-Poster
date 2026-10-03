@@ -9,7 +9,7 @@
 | uploadedPhotoUrls | string[] | 1–3 |
 | backgroundUrl | string | optional; user's own design, only kept for templates with `customBackground` |
 | photoAdjust | `{ x, y, zoom }[]` | optional, one per photo: focal point % (0–100) + zoom (1–3), set by pan/zoom on the form |
-| layout | `{ key, dx, dy, scale, rotate }[]` | optional, from the canvas editor; array order = paint order (D9) |
+| layout | `{ key, dx, dy, scale, rotate, shape?, hidden? }[]` | optional, from the canvas editor; array order = paint order (D9); `shape`/`hidden` per photo (D12) |
 | textColors | `{ headline?, name?, meta? }` (#rrggbb) | optional, from the editor; a missing key keeps the template/AI color (D11) |
 | layers | `{ background, items: { key, url, x, y, w, h }[] }` | cut-outs of the last render for the editor |
 | aiSuggestion | object | Gemini JSON used for the last render |
@@ -40,7 +40,7 @@ Rate limit (`express-rate-limit`, 10/hour, keyed by user id, in-memory) on creat
 - Template must exist and be active (404); photo count ≤ `layoutConfig.photoSlots` (400).
 - Not found / bad id → 404; other user's poster → 403.
 - Regenerate: 409 while `generating` or when `regenerateCount >= 3`. Body `{ formData? }` replaces the whole formData; photos and template can't change.
-- `layout`: ≤5 entries, key `headline|info|photo0|photo1|photo2`, dx/dy ±1600, scale 0.2–4, rotate ±180 → else 400. Rate-limited like create. Regenerate keeps it.
+- `layout`: ≤5 entries, key `headline|info|photo0|photo1|photo2`, dx/dy ±1600, scale 0.2–4, rotate ±180 → else 400.  Optional `shape` `circle|square|portrait|landscape` and `hidden` boolean (D12). Rate-limited like create. Regenerate keeps it.
 - `textColors` (optional, same PUT): only keys `headline|name|meta`, each `#rrggbb` → else 400. Omitted → cleared (the editor always sends it). Regenerate keeps it.
 - Delete → 204. Generated Cloudinary files are not deleted.
 

@@ -63,3 +63,5 @@ Hind Siliguri (Regular, Bold, OFL) bundled in `server/src/templates/fonts/`, emb
 ## Ops notes
 - Cloudinary blocks PDF delivery on new accounts by default: Settings → Security → enable "Allow delivery of PDF and ZIP files", or the PDF link returns 401.
 - Docker image (deploy, D3) needs Chromium's system libs; Puppeteer downloads Chrome on `npm install`.
+
+Photo shape / removal (`layout[].shape`, `layout[].hidden`, D12): `photoTags` adds the shape's CSS (`height:auto;aspect-ratio:…;border-radius:…`) to that photo's inline style, so it beats the template's `.photo` rules and the layer is cut with the new shape. `hidden` sets `visibility:hidden` after the cut-out, so the slot stays and other layers' moves don't shift.

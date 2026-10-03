@@ -17,7 +17,8 @@ export type Poster = {
   layers?: { background: string; items: { key: string; url: string; x: number; y: number; w: number; h: number }[] };
 };
 // Canvas editor move of one poster part (server: render.service LayoutEntry).
-export type LayoutEntry = { key: string; dx: number; dy: number; scale: number; rotate: number };
+export type PhotoShape = "circle" | "square" | "portrait" | "landscape";
+export type LayoutEntry = { key: string; dx: number; dy: number; scale: number; rotate: number; shape?: PhotoShape; hidden?: boolean };
 // User-picked text color (#rrggbb) per section; a missing key keeps the template/AI color.
 export type TextColors = { headline?: string; name?: string; meta?: string };
 

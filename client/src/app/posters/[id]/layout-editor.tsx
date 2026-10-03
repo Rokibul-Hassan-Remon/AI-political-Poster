@@ -6,7 +6,7 @@
 import type Konva from "konva";
 import { useEffect, useRef, useState } from "react";
 import { Image as KImage, Layer, Stage, Transformer } from "react-konva";
-import type { LayoutEntry, Poster, TextColors } from "../../poster-fields";
+import type { LayoutEntry, PhotoShape, Poster, TextColors } from "../../poster-fields";
 
 const W = 1200;
 const H = 1600;
@@ -16,6 +16,14 @@ const COLOR_PARTS: [keyof TextColors, string][] = [
   ["name", "নাম"],
   ["meta", "পদবি ও এলাকা"],
 ];
+const SHAPES: [PhotoShape | "", string][] = [
+  ["", "টেমপ্লেটের ফ্রেম"],
+  ["circle", "গোল"],
+  ["square", "চৌকো"],
+  ["portrait", "লম্বা (৩:৪)"],
+  ["landscape", "চওড়া (৪:৩)"],
+];
+const photoLabel = (key: string) => `ছবি ${"১২৩"[+key.slice(5)]}`;
 
 function useImage(src: string) {
   const [img, setImg] = useState<HTMLImageElement>();
@@ -95,14 +103,18 @@ export default function LayoutEditor({
   }, [selected, width]);
 
   const k = width / W;
+  const moveOf = (key: string) => moves[key] ?? { key, ...NONE };
+  // Merge so a drag doesn't drop the part's shape/hidden flags.
+  const patch = (key: string, p: Partial<LayoutEntry>) => setMoves((ms) => ({ ...ms, [key]: { ...(ms[key] ?? { key, ...NONE }), ...p } }));
+  const hiddenPhotos = order.filter((key) => key.startsWith("photo") && moves[key]?.hidden);
+  const selectedPhoto = selected?.startsWith("photo") ? selected : undefined;
 
   async function save() {
     setBusy(true);
     const r = (n: number, d = 0) => +n.toFixed(d);
     // Round so the values pass the server's zod limits and stay readable in the DB.
-    const all = order.map((key) => moves[key] ?? { key, ...NONE });
     await onSave(
-      all.map((m) => ({ key: m.key, dx: r(m.dx), dy: r(m.dy), scale: r(Math.min(4, Math.max(0.2, m.scale)), 3), rotate: r(m.rotate, 1) })),
+      order.map(moveOf).map((m) => ({ ...m, dx: r(m.dx), dy: r(m.dy), scale: r(Math.min(4, Math.max(0.2, m.scale)), 3), rotate: r(m.rotate, 1) })),
       colors,
     );
     setBusy(false);
@@ -123,13 +135,13 @@ export default function LayoutEditor({
           >
             <Layer>
               {bg && <KImage image={bg} width={W} height={H} listening={false} />}
-              {order.map((key) => items.find((i) => i.key === key)!).map((item) => (
+              {order.filter((key) => !moves[key]?.hidden).map((key) => items.find((i) => i.key === key)!).map((item) => (
                 <Part
                   key={item.key}
                   item={item}
-                  move={moves[item.key] ?? { key: item.key, ...NONE }}
+                  move={moveOf(item.key)}
                   onSelect={() => setSelected(item.key)}
-                  onChange={(m) => setMoves((ms) => ({ ...ms, [m.key]: m }))}
+                  onChange={(m) => patch(m.key, m)}
                 />
               ))}
               <Transformer
@@ -144,6 +156,52 @@ export default function LayoutEditor({
         )}
       </div>
       <p className="text-sm text-gray-500">যেকোনো অংশ ধরে টেনে সরান। ক্লিক করলে কোণা টেনে বড়-ছোট আর ওপরের গোল বিন্দু দিয়ে ঘোরানো যাবে।</p>
+      {/* Photo shape / remove: like colors, the canvas shows a new shape only after saving (server re-cuts the layer). */}
+      {(selectedPhoto || hiddenPhotos.length > 0) && (
+        <fieldset className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm">
+          <legend className="px-1 font-semibold text-neutral-700">ছবি</legend>
+          {selectedPhoto && (
+            <>
+              <label className="flex items-center gap-1.5">
+                {photoLabel(selectedPhoto)}-এর আকৃতি
+                <select
+                  value={moveOf(selectedPhoto).shape ?? ""}
+                  onChange={(e) => patch(selectedPhoto, { shape: (e.target.value || undefined) as PhotoShape | undefined })}
+                  disabled={busy}
+                  className="rounded border border-neutral-300 bg-white px-1.5 py-1"
+                >
+                  {SHAPES.map(([v, label]) => (
+                    <option key={v} value={v}>{label}</option>
+                  ))}
+                </select>
+              </label>
+              <button
+                type="button"
+                onClick={() => {
+                  patch(selectedPhoto, { hidden: true });
+                  setSelected(undefined);
+                }}
+                disabled={busy}
+                className="rounded border border-red-600 px-2 py-1 font-semibold text-red-600 hover:bg-red-50"
+              >
+                ছবিটি সরান
+              </button>
+            </>
+          )}
+          {hiddenPhotos.map((key) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => patch(key, { hidden: false })}
+              disabled={busy}
+              className="rounded border border-green-700 px-2 py-1 text-green-700 hover:bg-green-50"
+            >
+              {photoLabel(key)} ফেরত আনুন
+            </button>
+          ))}
+          <p className="w-full text-xs text-neutral-500">নতুন আকৃতি সংরক্ষণ করার পর পোস্টারে দেখা যাবে।</p>
+        </fieldset>
+      )}
       {/* Text colors: the canvas shows images of the last render, so a new color shows after saving. */}
       <fieldset className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm">
         <legend className="px-1 font-semibold text-neutral-700">লেখার রং</legend>
