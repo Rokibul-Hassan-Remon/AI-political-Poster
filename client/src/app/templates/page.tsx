@@ -10,7 +10,7 @@ type Template = {
   title: string;
   occasionType: string;
   thumbnailUrl: string;
-  layoutConfig: { photoSlots: number; defaultScheme: Scheme; headlineDefault: string };
+  layoutConfig: { photoSlots: number; defaultScheme: Scheme; headlineDefault: string; customBackground?: boolean };
 };
 
 const OCCASIONS: [string, string][] = [
@@ -20,13 +20,20 @@ const OCCASIONS: [string, string][] = [
   ["campaign", "নির্বাচনী প্রচার"],
   ["greetings", "শুভেচ্ছা"],
   ["festival", "ঈদ / উৎসব"],
-  ["custom", "নিজের ডিজাইন"],
 ];
 
 export default function TemplatesPage() {
   const [occasion, setOccasion] = useState("");
   const [templates, setTemplates] = useState<Template[] | null>(null);
   const [error, setError] = useState("");
+  // The "own design" template gets its own banner above the grid instead of a card.
+  const [own, setOwn] = useState<Template | null>(null);
+
+  useEffect(() => {
+    api<Template[]>("/api/templates?occasion=custom")
+      .then((t) => setOwn(t.find((x) => x.layoutConfig.customBackground) ?? null))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     api<Template[]>(`/api/templates${occasion ? `?occasion=${occasion}` : ""}`)
@@ -40,6 +47,21 @@ export default function TemplatesPage() {
   return (
     <main className="mx-auto w-full max-w-5xl p-6">
       <h1 className="mb-4 text-3xl font-bold text-green-700">টেমপ্লেট বেছে নিন</h1>
+
+      {own && (
+        <Link
+          href={`/create/${own._id}`}
+          className="mb-6 flex flex-col gap-3 rounded-lg border-2 border-dashed border-green-700 bg-green-50 p-5 transition hover:shadow-lg sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <p className="text-xl font-bold text-green-800">নিজের টেমপ্লেট দিয়ে পোস্টার বানান</p>
+            <p className="text-neutral-600">
+              আপনার পছন্দের ডিজাইন আপলোড করুন, সর্বোচ্চ {own.layoutConfig.photoSlots}টি ছবি দিন। লেখা ও ছবি পরে যেখানে খুশি সরাতে পারবেন।
+            </p>
+          </div>
+          <span className="shrink-0 rounded-md bg-green-700 px-4 py-2 text-center font-semibold text-white">ডিজাইন আপলোড করুন</span>
+        </Link>
+      )}
 
       <div className="mb-6 flex flex-wrap gap-2">
         {OCCASIONS.map(([value, label]) => (
@@ -58,7 +80,7 @@ export default function TemplatesPage() {
       {templates?.length === 0 && <p>এই উপলক্ষে কোনো টেমপ্লেট নেই।</p>}
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-        {templates?.map((t) => {
+        {templates?.filter((t) => !t.layoutConfig.customBackground).map((t) => {
           const s = t.layoutConfig.defaultScheme;
           return (
             <Link key={t._id} href={`/create/${t._id}`} className="group overflow-hidden rounded-lg border transition hover:-translate-y-1 hover:shadow-xl">

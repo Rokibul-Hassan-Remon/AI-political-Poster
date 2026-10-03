@@ -13,10 +13,13 @@ export type Poster = {
   regenerateCount: number;
   createdAt: string;
   layout?: LayoutEntry[];
+  textColors?: TextColors;
   layers?: { background: string; items: { key: string; url: string; x: number; y: number; w: number; h: number }[] };
 };
 // Canvas editor move of one poster part (server: render.service LayoutEntry).
 export type LayoutEntry = { key: string; dx: number; dy: number; scale: number; rotate: number };
+// User-picked text color (#rrggbb) per section; a missing key keeps the template/AI color.
+export type TextColors = { headline?: string; name?: string; meta?: string };
 
 export const MAX_REGENERATES = 3;
 
@@ -31,7 +34,7 @@ const FIELDS: [keyof PosterText, string, boolean][] = [
 export function PosterFields({ defaults, headlinePlaceholder }: { defaults?: PosterText; headlinePlaceholder?: string }) {
   return FIELDS.map(([key, label, required]) => (
     <label key={key} className="flex flex-col gap-1">
-      <span>
+      <span className="text-sm font-medium text-neutral-700">
         {label} {required && <span className="text-red-600">*</span>}
       </span>
       <input
@@ -40,7 +43,7 @@ export function PosterFields({ defaults, headlinePlaceholder }: { defaults?: Pos
         maxLength={150}
         defaultValue={defaults?.[key] ?? ""}
         placeholder={key === "headline" ? headlinePlaceholder : undefined}
-        className="rounded border px-3 py-2"
+        className="rounded-lg border border-neutral-300 bg-white px-3 py-2 outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700/20"
       />
     </label>
   ));

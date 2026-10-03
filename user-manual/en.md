@@ -9,8 +9,8 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 
 ## 2. Choose a template
 1. After logging in, click **টেমপ্লেট দেখুন** (View templates) on the home page.
-2. Filter by occasion: Victory Day, Mourning / Tribute, Election Campaign, Greetings, Eid / Festival, Own design.
-   - Don't like any design? Choose **নিজের ডিজাইন** (Own design): you upload your own background image (an upright 3:4 image such as 1200×1600 fits best; other sizes are cropped at the edges). Your text and photos go on top, and after the poster is made you can place them anywhere with **লেআউট সম্পাদনা** (see section 5).
+2. Filter by occasion: Victory Day, Mourning / Tribute, Election Campaign, Greetings, Eid / Festival.
+   - Don't like any design? Click the **নিজের টেমপ্লেট দিয়ে পোস্টার বানান** (Make a poster with your own template) banner at the top of the page: you upload your own background image (an upright 3:4 image such as 1200×1600 fits best; other sizes are cropped at the edges). Your text and photos go on top, and after the poster is made you can place them anywhere with **লেআউট সম্পাদনা** (see section 5).
 3. Each card shows a preview of the finished poster, its occasion and how many photos it takes (1–3). Click the one you like.
 
 ## 3. Fill the form
@@ -31,7 +31,7 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 
 ## 4. Generate and preview
 1. Click **পোস্টার তৈরি করুন** (Create poster). Your photos upload, then the poster page opens and shows progress while the poster is made (a few seconds).
-2. Check the preview. Colors and layout are suggested by AI to match the occasion.
+2. Check the preview (on the right on a computer, at the top on a phone; the form to change the text is beside it). Colors and layout are suggested by AI to match the occasion.
 3. Not happy? Edit the text and click **আবার তৈরি করুন** (Regenerate). The button shows how many tries are left — **3** per poster.
 
 ## 5. Move things around (layout editor)
@@ -39,9 +39,10 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 2. Drag the headline, the name box or any photo anywhere on the poster.
 3. Click a part to select it: drag a corner to make it bigger or smaller, drag the round dot above it to rotate.
 4. Parts can overlap: select one and click **সামনে আনুন** (Bring to front) to put it on top.
-5. Click **সংরক্ষণ করুন** (Save). The poster is made again in your new layout; colors stay the same and it does **not** use up a regenerate. **আগের মতো করুন** (Reset) puts everything back where the template had it; **বাতিল** (Cancel) closes the editor without changes.
+5. Under **লেখার রং** (Text color), pick your own color for **শিরোনাম** (headline), **নাম** (name) and **পদবি ও এলাকা** (designation and area). The ✕ next to a color goes back to the template's color. The new color shows on the poster after you save.
+6. Click **সংরক্ষণ করুন** (Save). The poster is made again with your layout and colors, and it does **not** use up a regenerate. **আগের মতো করুন** (Reset) puts every part back where the template had it and brings back the template's colors; **বাতিল** (Cancel) closes the editor without changes.
 
-Your layout is kept when you later change the text and regenerate. Posters made before this feature need one regenerate before the editor appears.
+Your layout and colors are kept when you later change the text and regenerate. Posters made before this feature need one regenerate before the editor appears.
 
 ## 6. Download
 - **PNG** — high resolution (2400×3200), ready for the printing press.

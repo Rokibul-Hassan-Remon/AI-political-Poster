@@ -24,6 +24,17 @@ export interface RenderData {
   photoAdjust?: { x?: number | null; y?: number | null; zoom?: number | null }[];
   layout?: LayoutEntry[];
   backgroundUrl?: string; // user's own design (templates with customBackground)
+  // User-picked text color per section; every template styles these with .headline / .name / .meta.
+  textColors?: { headline?: string | null; name?: string | null; meta?: string | null };
+}
+
+// Override CSS for the user's text colors, added after the template's own styles.
+// Keys are read by name, not Object.entries: the poster passes a Mongoose subdocument, whose own keys are internals.
+function textColorCss(colors: RenderData['textColors'] = {}): string {
+  return (['headline', 'name', 'meta'] as const)
+    .filter((key) => /^#[0-9a-fA-F]{6}$/.test(colors[key] ?? ''))
+    .map((key) => `.${key}{color:${colors[key]}!important}`)
+    .join('');
 }
 
 // User's move/scale/rotate of one [data-layer] element, relative to where the template puts it.
@@ -71,7 +82,9 @@ export function fillTemplate(html: string, d: RenderData): string {
     headline: escapeHtml(d.headline),
     backgroundUrl: escapeHtml(d.backgroundUrl ?? ''),
   };
-  return html.replace(/\{\{(\w+)\}\}/g, (_, key: string) => vars[key] ?? '');
+  return html
+    .replace(/\{\{(\w+)\}\}/g, (_, key: string) => vars[key] ?? '')
+    .replace('</head>', `<style>${textColorCss(d.textColors)}</style></head>`);
 }
 
 let browser: Promise<Browser> | undefined;

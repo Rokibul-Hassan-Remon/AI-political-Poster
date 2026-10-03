@@ -44,7 +44,9 @@ One self-contained HTML file per seeded template slug. Placeholders `{{key}}`:
 | `name`, `designation`, `organization`, `area`, `headline` | user text, HTML-escaped |
 | `backgroundUrl` | user's own design (Cloudinary, own uploads only); used by `own-design.html` as a full-page `<img class="bg">`, so the load check covers it and it lands in the editor's background layer |
 
-Unknown keys become empty strings. New template = seed entry + `<slug>.html`, with `data-layer="headline"` on the headline and `data-layer="info"` on the name/designation/area block (layout editor, see below).
+Unknown keys become empty strings. New template = seed entry + `<slug>.html`, with `data-layer="headline"` on the headline and `data-layer="info"` on the name/designation/area block (layout editor, see below), and the classes `.headline`, `.name`, `.meta` on the headline, name and designation/area lines.
+
+User text colors (`poster.textColors`, D11): `fillTemplate` adds `<style>.headline{color:#..!important}…</style>` before `</head>` for each set key; values not matching `#rrggbb` are skipped.
 
 ## Fonts
 Hind Siliguri (Regular, Bold, OFL) bundled in `server/src/templates/fonts/`, embedded as data URIs — no network font loading at render time.

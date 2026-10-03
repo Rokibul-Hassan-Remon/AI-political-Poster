@@ -55,6 +55,7 @@ export async function run(posterId: string, { keepSuggestion = false } = {}): Pr
       photoUrls: poster.uploadedPhotoUrls, // user's order; [0] is the main photo
       photoAdjust: poster.photoAdjust ?? undefined,
       backgroundUrl: poster.backgroundUrl ?? undefined,
+      textColors: poster.textColors ?? undefined,
       layout: poster.layout?.map((l) => ({ key: l.key!, dx: l.dx!, dy: l.dy!, scale: l.scale!, rotate: l.rotate! })),
     });
     const folder = `rise-together/posters/${poster.userId}`;

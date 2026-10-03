@@ -42,6 +42,15 @@ const layoutBody = z.object({
       }),
     )
     .max(5),
+  // Missing/empty → that section keeps the template/AI color. Colors go into CSS, so only #rrggbb.
+  textColors: z
+    .object({
+      headline: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+      name: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+      meta: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+    })
+    .strict()
+    .optional(),
 });
 
 // Puppeteer will load these URLs: only accept the user's own uploads (no SSRF, no hotlinking).
@@ -109,10 +118,10 @@ postersRouter.post('/:id/regenerate', generationLimit, async (req, res) => {
 
 // Canvas editor save: re-render with the same text and colors; doesn't use up a regenerate.
 postersRouter.put('/:id/layout', generationLimit, async (req, res) => {
-  const { layout } = layoutBody.parse(req.body);
+  const { layout, textColors } = layoutBody.parse(req.body);
   const poster = await ownPoster(req);
   if (poster.status === 'generating') throw new HttpError(409, 'Poster is still generating');
-  poster.set({ layout, status: 'generating', error: undefined });
+  poster.set({ layout, textColors, status: 'generating', error: undefined });
   await poster.save();
   void run(poster.id, { keepSuggestion: true });
   res.json(poster);

@@ -25,7 +25,7 @@ Not created yet — written with the generation module, which owns the placehold
 `npm run seed` (`server/src/scripts/seed.ts`): renders each template's thumbnail (needs Cloudinary + Chromium), upserts templates by slug (`victory-day-classic`, `mourning-tribute`, `campaign-bold`, `eid-mubarak`, `greetings-warm`) and, if `ADMIN_EMAIL` + `ADMIN_PASSWORD` are set, the admin user (role `admin`, password reset to the env value on every run). Idempotent.
 
 ## Client
-`client/src/app/templates/page.tsx`: occasion filter chips, cards link to `/create/[templateId]`. Linked from the home page user menu.
+`client/src/app/templates/page.tsx`: a banner at the top links to the `customBackground` template ("own design", fetched once via `?occasion=custom`); below it, occasion filter chips and cards for the other templates link to `/create/[templateId]`. Linked from the home page user menu.
 
 ## Files
 `server/src/models/Template.ts`, `server/src/routes/templates.ts`, `server/src/scripts/seed.ts`
