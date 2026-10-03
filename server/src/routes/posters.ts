@@ -22,12 +22,27 @@ const createBody = z.object({
   templateId: z.string().refine(isValidObjectId, 'Invalid template id'),
   formData,
   uploadedPhotoUrls: z.array(z.url()).min(1).max(3),
+  backgroundUrl: z.url().optional(),
   photoAdjust: z
     .array(z.object({ x: z.number().min(0).max(100), y: z.number().min(0).max(100), zoom: z.number().min(1).max(3) }))
     .max(3)
     .optional(),
 }).refine((b) => !b.photoAdjust || b.photoAdjust.length === b.uploadedPhotoUrls.length, 'photoAdjust needs one entry per photo');
 const regenerateBody = z.object({ formData: formData.optional() });
+// Keys match the templates' data-layer attributes; [] resets to the template layout.
+const layoutBody = z.object({
+  layout: z
+    .array(
+      z.object({
+        key: z.enum(['headline', 'info', 'photo0', 'photo1', 'photo2']),
+        dx: z.number().min(-1600).max(1600),
+        dy: z.number().min(-1600).max(1600),
+        scale: z.number().min(0.2).max(4),
+        rotate: z.number().min(-180).max(180),
+      }),
+    )
+    .max(5),
+});
 
 // Puppeteer will load these URLs: only accept the user's own uploads (no SSRF, no hotlinking).
 function checkPhotoUrls(urls: string[], userId: string) {
@@ -57,9 +72,12 @@ postersRouter.use(requireAuth);
 
 postersRouter.post('/', generationLimit, async (req, res) => {
   const body = createBody.parse(req.body);
-  checkPhotoUrls(body.uploadedPhotoUrls, req.user!.id);
+  checkPhotoUrls([...body.uploadedPhotoUrls, ...(body.backgroundUrl ? [body.backgroundUrl] : [])], req.user!.id);
   const template = await Template.findOne({ _id: body.templateId, isActive: true });
   if (!template) throw new HttpError(404, 'Template not found');
+  const custom = template.layoutConfig!.customBackground;
+  if (custom && !body.backgroundUrl) throw new HttpError(400, 'This template needs your own background image');
+  if (!custom) delete body.backgroundUrl;
   if (body.uploadedPhotoUrls.length > template.layoutConfig!.photoSlots) {
     throw new HttpError(400, `This template takes at most ${template.layoutConfig!.photoSlots} photo(s)`);
   }
@@ -86,6 +104,17 @@ postersRouter.post('/:id/regenerate', generationLimit, async (req, res) => {
   poster.set({ status: 'generating', error: undefined, regenerateCount: poster.regenerateCount + 1 });
   await poster.save();
   void run(poster.id);
+  res.json(poster);
+});
+
+// Canvas editor save: re-render with the same text and colors; doesn't use up a regenerate.
+postersRouter.put('/:id/layout', generationLimit, async (req, res) => {
+  const { layout } = layoutBody.parse(req.body);
+  const poster = await ownPoster(req);
+  if (poster.status === 'generating') throw new HttpError(409, 'Poster is still generating');
+  poster.set({ layout, status: 'generating', error: undefined });
+  await poster.save();
+  void run(poster.id, { keepSuggestion: true });
   res.json(poster);
 });
 

@@ -16,6 +16,7 @@ const templates: Omit<TemplateData, 'createdAt' | 'updatedAt' | 'isActive' | 'th
       photoSlots: 3,
       defaultScheme: { primary: '#006A4E', secondary: '#F42A41', accent: '#FFD700', text: '#FFFFFF' },
       headlineDefault: 'মহান বিজয় দিবস',
+      customBackground: false,
     },
   },
   {
@@ -26,6 +27,7 @@ const templates: Omit<TemplateData, 'createdAt' | 'updatedAt' | 'isActive' | 'th
       photoSlots: 2,
       defaultScheme: { primary: '#111111', secondary: '#3A3A3A', accent: '#B22222', text: '#FFFFFF' },
       headlineDefault: 'গভীর শ্রদ্ধাঞ্জলি',
+      customBackground: false,
     },
   },
   {
@@ -36,6 +38,7 @@ const templates: Omit<TemplateData, 'createdAt' | 'updatedAt' | 'isActive' | 'th
       photoSlots: 1,
       defaultScheme: { primary: '#0B5D1E', secondary: '#FFFFFF', accent: '#E63946', text: '#1A1A1A' },
       headlineDefault: 'আপনার ভোট আপনার অধিকার',
+      customBackground: false,
     },
   },
   {
@@ -46,6 +49,7 @@ const templates: Omit<TemplateData, 'createdAt' | 'updatedAt' | 'isActive' | 'th
       photoSlots: 2,
       defaultScheme: { primary: '#0B3D2E', secondary: '#14614A', accent: '#F2C14E', text: '#FFFFFF' },
       headlineDefault: 'ঈদ মোবারক',
+      customBackground: false,
     },
   },
   {
@@ -56,9 +60,28 @@ const templates: Omit<TemplateData, 'createdAt' | 'updatedAt' | 'isActive' | 'th
       photoSlots: 2,
       defaultScheme: { primary: '#7A1F2B', secondary: '#FFF6E5', accent: '#E0A526', text: '#3A1A1F' },
       headlineDefault: 'আন্তরিক শুভেচ্ছা',
+      customBackground: false,
+    },
+  },
+  {
+    title: 'নিজের ডিজাইন',
+    slug: 'own-design',
+    occasionType: 'custom',
+    layoutConfig: {
+      photoSlots: 3,
+      defaultScheme: { primary: '#222222', secondary: '#444444', accent: '#FFD700', text: '#FFFFFF' },
+      headlineDefault: 'আপনার শিরোনাম',
+      customBackground: true,
     },
   },
 ];
+
+// Stands in for the user's own design on the "own-design" thumbnail.
+const SAMPLE_BACKGROUND =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600"><defs><linearGradient id="g" x2="1" y2="1"><stop offset="0" stop-color="#5b6b8c"/><stop offset="1" stop-color="#2b3247"/></linearGradient></defs><rect width="1200" height="1600" fill="url(#g)"/><path d="M0 1300 L1200 1000 V1600 H0z" fill="#ffffff22"/></svg>',
+  );
 
 // Grey head-and-shoulders silhouette standing in for leader photos on the thumbnails.
 const SAMPLE_PHOTO =
@@ -80,6 +103,7 @@ async function renderThumbnail(t: (typeof templates)[number]): Promise<string> {
     area: 'এলাকা',
     headline: lc.headlineDefault,
     photoUrls: Array(lc.photoSlots).fill(SAMPLE_PHOTO),
+    backgroundUrl: lc.customBackground ? SAMPLE_BACKGROUND : undefined,
   });
   const url = await uploadBuffer(png, 'rise-together/thumbnails');
   return url.replace('/upload/', '/upload/w_600,f_auto,q_auto/'); // Cloudinary resizes on delivery

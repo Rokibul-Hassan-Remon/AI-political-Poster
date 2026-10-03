@@ -1,7 +1,7 @@
 import { GenerationLog } from '../models/GenerationLog';
 import { Poster } from '../models/Poster';
 import { Template } from '../models/Template';
-import { suggest, type Suggestion } from './gemini.service';
+import { suggest, suggestionSchema, type Suggestion } from './gemini.service';
 import { render } from './render.service';
 import { uploadBuffer } from './storage.service';
 
@@ -15,7 +15,8 @@ function fallback(scheme: Suggestion['scheme'], headline: string): Suggestion {
 }
 
 // Background job (D4): never awaited by the route, so it must never throw.
-export async function run(posterId: string): Promise<void> {
+// keepSuggestion: a layout-only re-render reuses the last colors instead of asking Gemini again.
+export async function run(posterId: string, { keepSuggestion = false } = {}): Promise<void> {
   const started = Date.now();
   let prompt: string | undefined;
   let tokens: number | undefined;
@@ -29,8 +30,10 @@ export async function run(posterId: string): Promise<void> {
     const form = poster.formData!;
     const headline = form.headline || headlineDefault;
 
+    const kept = keepSuggestion ? suggestionSchema.safeParse(poster.aiSuggestion) : undefined;
     let suggestion: Suggestion;
-    try {
+    if (kept?.success) suggestion = kept.data;
+    else try {
       ({ suggestion, prompt, tokens } = await suggest({
         occasionType: template.occasionType,
         defaultScheme: scheme,
@@ -41,7 +44,7 @@ export async function run(posterId: string): Promise<void> {
       suggestion = fallback(scheme, headline);
     }
 
-    const { png, pdf } = await render(template.slug, {
+    const { png, pdf, background, layers } = await render(template.slug, {
       scheme: suggestion.scheme,
       headlineSize: suggestion.headlineSize,
       name: form.name,
@@ -51,14 +54,23 @@ export async function run(posterId: string): Promise<void> {
       headline,
       photoUrls: poster.uploadedPhotoUrls, // user's order; [0] is the main photo
       photoAdjust: poster.photoAdjust ?? undefined,
+      backgroundUrl: poster.backgroundUrl ?? undefined,
+      layout: poster.layout?.map((l) => ({ key: l.key!, dx: l.dx!, dy: l.dy!, scale: l.scale!, rotate: l.rotate! })),
     });
     const folder = `rise-together/posters/${poster.userId}`;
-    const [imageUrl, pdfUrl] = await Promise.all([uploadBuffer(png, folder), uploadBuffer(pdf, folder)]);
+    // ponytail: layer files of earlier renders stay in Cloudinary, like the old PNG/PDF.
+    const [imageUrl, pdfUrl, backgroundUrl, ...layerUrls] = await Promise.all(
+      [png, pdf, background, ...layers.map((l) => l.png)].map((b) => uploadBuffer(b, folder)),
+    );
+    const layerDocs = {
+      background: backgroundUrl,
+      items: layers.map(({ key, x, y, w, h }, i) => ({ key, url: layerUrls[i], x, y, w, h })),
+    };
 
     // updateOne, not save(): if the user deleted the poster meanwhile, nothing is re-created.
     await Poster.updateOne(
       { _id: posterId },
-      { status: 'completed', aiSuggestion: suggestion, generatedImageUrl: imageUrl, generatedPdfUrl: pdfUrl, $unset: { error: 1 } },
+      { status: 'completed', aiSuggestion: suggestion, generatedImageUrl: imageUrl, generatedPdfUrl: pdfUrl, layers: layerDocs, $unset: { error: 1 } },
     );
     await GenerationLog.create({ posterId, promptUsed: prompt, tokensUsed: tokens, latencyMs: Date.now() - started, success: true });
   } catch (err) {

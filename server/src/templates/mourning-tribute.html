@@ -25,11 +25,13 @@ body::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; he
 </head>
 <body>
   <div class="ribbon"></div>
-  <h1 class="headline {{headlineSize}}">{{headline}}</h1>
+  <h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1>
   <div class="photos n{{photoCount}}">{{photos}}</div>
   <div class="divider"></div>
+  <div data-layer="info">
   <div class="name">{{name}}</div>
   <div class="meta">{{designation}}, {{organization}}</div>
   <div class="meta">{{area}}</div>
+  </div>
 </body>
 </html>

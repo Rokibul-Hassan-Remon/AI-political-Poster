@@ -12,7 +12,11 @@ export type Poster = {
   error?: string;
   regenerateCount: number;
   createdAt: string;
+  layout?: LayoutEntry[];
+  layers?: { background: string; items: { key: string; url: string; x: number; y: number; w: number; h: number }[] };
 };
+// Canvas editor move of one poster part (server: render.service LayoutEntry).
+export type LayoutEntry = { key: string; dx: number; dy: number; scale: number; rotate: number };
 
 export const MAX_REGENERATES = 3;
 

@@ -1,16 +1,21 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import { MAX_REGENERATES, PosterFields, readPosterText, type Poster } from "../../poster-fields";
+import { MAX_REGENERATES, PosterFields, readPosterText, type LayoutEntry, type Poster } from "../../poster-fields";
+
+// Konva needs the browser's canvas: never render it on the server.
+const LayoutEditor = dynamic(() => import("./layout-editor"), { ssr: false });
 
 export default function PosterPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const [poster, setPoster] = useState<Poster | null>(null);
   const [error, setError] = useState("");
+  const [editing, setEditing] = useState(false);
 
   // Poll every 2s while the background job runs.
   const generating = !poster || poster.status === "generating";
@@ -32,6 +37,16 @@ export default function PosterPage() {
     }
   }
 
+  async function saveLayout(layout: LayoutEntry[]) {
+    setError("");
+    try {
+      setPoster(await api<Poster>(`/api/posters/${id}/layout`, { method: "PUT", body: JSON.stringify({ layout }) }));
+      setEditing(false);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  }
+
   async function remove() {
     if (!confirm("পোস্টারটি মুছে ফেলবেন?")) return;
     await api(`/api/posters/${id}`, { method: "DELETE" }).then(() => router.push("/history"), (e: Error) => setError(e.message));
@@ -45,13 +60,21 @@ export default function PosterPage() {
       <section>
         {poster.status === "generating" && <p className="animate-pulse text-lg">পোস্টার তৈরি হচ্ছে… একটু অপেক্ষা করুন।</p>}
         {poster.status === "failed" && <p className="text-red-600">পোস্টার তৈরি হয়নি: {poster.error}</p>}
-        {poster.status === "completed" && (
+        {poster.status === "completed" && editing && (
+          <LayoutEditor poster={poster} onSave={saveLayout} onCancel={() => setEditing(false)} />
+        )}
+        {poster.status === "completed" && !editing && (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={poster.generatedImageUrl} alt="পোস্টার" className="w-full rounded border" />
-            <div className="mt-3 flex gap-3">
+            <div className="mt-3 flex flex-wrap gap-3">
               <a href={poster.generatedImageUrl} target="_blank" className="rounded bg-green-700 px-4 py-2 font-semibold text-white">PNG ডাউনলোড</a>
               <a href={poster.generatedPdfUrl} target="_blank" className="rounded border border-green-700 px-4 py-2 font-semibold text-green-700">PDF ডাউনলোড</a>
+              {poster.layers && (
+                <button onClick={() => setEditing(true)} className="rounded border border-green-700 px-4 py-2 font-semibold text-green-700">
+                  লেআউট সম্পাদনা
+                </button>
+              )}
             </div>
           </>
         )}

@@ -7,7 +7,7 @@
 | slug | string | unique; maps to `server/src/templates/<slug>.html` |
 | occasionType | enum | see business.md (`OCCASIONS` in `models/Template.ts`) |
 | thumbnailUrl | string | set by seed: the real template rendered with sample data, uploaded to Cloudinary `rise-together/thumbnails` (600px via URL transform). Client falls back to a color block when empty |
-| layoutConfig | object | `{ photoSlots: 1-3, defaultScheme: {primary,secondary,accent,text} (#rrggbb), headlineDefault }` |
+| layoutConfig | object | `{ photoSlots: 1-3, defaultScheme: {primary,secondary,accent,text} (#rrggbb), headlineDefault, customBackground (bool, default false: poster must send `backgroundUrl`) }` |
 | isActive | boolean | default true |
 
 ## Endpoints

@@ -23,4 +23,4 @@
 - The user picks the **main photo** on the form (মূল ছবি); other photos keep upload order.
 - With 1 or 3 photos the main photo sits in the middle (largest on 3-photo templates); with 2 it is the first (left).
 - Inside its frame, the user can drag (pan) and zoom (1–3×) each photo so the face sits right; the poster uses the same crop.
-- Moving photos to other places on the poster is post-MVP (D8).
+- After the first render, the layout editor lets the user move, resize, rotate and reorder the headline, the name block and each photo anywhere on the poster (D9). Saving re-renders with the same text and colors and does not count as a regenerate (it does count toward the hourly limit).

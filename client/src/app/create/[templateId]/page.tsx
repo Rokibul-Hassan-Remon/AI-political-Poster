@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { PosterFields, readPosterText, type Poster } from "../../poster-fields";
 
-type Template = { _id: string; title: string; layoutConfig: { photoSlots: number; headlineDefault: string } };
+type Template = { _id: string; title: string; layoutConfig: { photoSlots: number; headlineDefault: string; customBackground?: boolean } };
 // x, y: focal point in % (object-position); zoom 1–3. The server renders the same crop (render.service adjustStyle).
 type Photo = { file: File; url: string; x: number; y: number; zoom: number };
 
@@ -20,6 +20,7 @@ export default function CreatePage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [background, setBackground] = useState<{ file: File; url: string } | null>(null); // own-design templates
 
   useEffect(() => {
     api<Template>(`/api/templates/${templateId}`).then(setTemplate).catch((e: Error) => setError(e.message));
@@ -28,6 +29,7 @@ export default function CreatePage() {
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
+    if (template!.layoutConfig.customBackground && !background) return setError("আপনার ডিজাইনের ছবিটি দিন।");
     if (photos.length < 1) return setError("অন্তত ১টি ছবি দিন।");
 
     setBusy(true);
@@ -36,10 +38,16 @@ export default function CreatePage() {
       const upload = new FormData();
       for (const p of photos) upload.append("photos", p.file);
       const { urls } = await api<{ urls: string[] }>("/api/upload", { method: "POST", body: upload });
+      let backgroundUrl: string | undefined;
+      if (background) {
+        const bg = new FormData();
+        bg.append("photos", background.file);
+        [backgroundUrl] = (await api<{ urls: string[] }>("/api/upload", { method: "POST", body: bg })).urls;
+      }
       const photoAdjust = photos.map(({ x, y, zoom }) => ({ x: Math.round(x), y: Math.round(y), zoom }));
       const poster = await api<Poster>("/api/posters", {
         method: "POST",
-        body: JSON.stringify({ templateId, formData: readPosterText(form), uploadedPhotoUrls: urls, photoAdjust }),
+        body: JSON.stringify({ templateId, formData: readPosterText(form), uploadedPhotoUrls: urls, backgroundUrl, photoAdjust }),
       });
       router.push(`/posters/${poster._id}`);
     } catch (e) {
@@ -56,6 +64,14 @@ export default function CreatePage() {
     const room = template!.layoutConfig.photoSlots - photos.length;
     const added = picked.slice(0, room).map((file) => ({ file, url: URL.createObjectURL(file), x: 50, y: 50, zoom: 1 }));
     setPhotos([...photos, ...added]);
+  }
+
+  function pickBackground(file: File | undefined) {
+    if (!file) return;
+    if (!ACCEPT.includes(file.type) || file.size > MAX_BYTES) return setError(`"${file.name}" নেওয়া যাচ্ছে না — শুধু JPG/PNG/WEBP, সর্বোচ্চ ৫ MB।`);
+    setError("");
+    if (background) URL.revokeObjectURL(background.url);
+    setBackground({ file, url: URL.createObjectURL(file) });
   }
 
   function removePhoto(i: number) {
@@ -88,6 +104,23 @@ export default function CreatePage() {
       <h1 className="mb-4 text-3xl font-bold text-green-700">{template.title}</h1>
       <form onSubmit={submit} className="flex flex-col gap-4">
         <PosterFields headlinePlaceholder={template.layoutConfig.headlineDefault} />
+        {template.layoutConfig.customBackground && (
+          <label className="flex flex-col gap-1">
+            <span>
+              আপনার ডিজাইন (পোস্টারের পটভূমি) <span className="text-red-600">*</span>
+            </span>
+            <div className="flex items-center gap-3">
+              {background && (
+                // eslint-disable-next-line @next/next/no-img-element -- local blob preview
+                <img src={background.url} alt="পটভূমি" className="aspect-3/4 w-24 rounded border object-cover" />
+              )}
+              <input type="file" accept={ACCEPT.join(",")} onChange={(e) => pickBackground(e.target.files?.[0])} />
+            </div>
+            <span className="text-sm text-gray-500">
+              খাড়া (৩:৪) ছবি সবচেয়ে ভালো মানায়, যেমন 1200×1600। অন্য মাপ হলে কিনারা কেটে বসবে। পোস্টার তৈরির পর “লেআউট সম্পাদনা” দিয়ে লেখা আর ছবি যেখানে খুশি বসাতে পারবেন।
+            </span>
+          </label>
+        )}
         <div className="flex flex-col gap-1">
           <span>
             ছবি (সর্বোচ্চ {template.layoutConfig.photoSlots}টি) <span className="text-red-600">*</span>

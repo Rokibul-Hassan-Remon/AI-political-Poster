@@ -4,10 +4,19 @@
 1. Load poster + template. Headline = `formData.headline` or `layoutConfig.headlineDefault`.
 2. `gemini.service.suggest({ occasionType, defaultScheme, headline })` → JSON validated with zod. On any error (no key, 15s timeout, bad JSON) → fallback: `defaultScheme`, `headlineSize` by headline length (≤12 chars `2xl`, ≤24 `xl`, else `lg`).
 3. `render.service.render(slug, data)` → fill `server/src/templates/<slug>.html` → Puppeteer → PNG + PDF buffers.
-4. Upload both to Cloudinary `rise-together/posters/<userId>/` via `storage.service` → `Poster.updateOne` (`completed`, `aiSuggestion`, URLs). Any throw → `failed` + generic `error` (details only in logs/GenerationLog).
+   `render` also returns the layout-editor cut-outs (see "Layers" below).
+4. Upload PNG, PDF, background and layer PNGs to Cloudinary `rise-together/posters/<userId>/` via `storage.service` → `Poster.updateOne` (`completed`, `aiSuggestion`, URLs). Any throw → `failed` + generic `error` (details only in logs/GenerationLog).
 5. Write `GenerationLog` (success or failure).
 
 `updateOne` (not `save`) so a poster deleted mid-job is not re-created.
+
+`run(id, { keepSuggestion: true })` (layout save) reuses `poster.aiSuggestion` instead of calling Gemini, so colors don't change.
+
+## Layers + layout (canvas editor, D9)
+- Movable elements carry `data-layer`: `headline`, `info` (name/designation/area block) in each template; `photo0..2` added by `render.service` (index = `uploadedPhotoUrls` order).
+- After load, for each layer: clip = element box + 60px pad (shadows/outlines), clamped to the page. Captured at 1× (`clip.scale: 0.5`): background JPEG with every layer `visibility:hidden`, then one transparent PNG per layer with everything else hidden.
+- Then, if `layout` is non-empty, every layer gets `transform-origin: <clip corner rel. to element>; transform: translate(dx,dy) rotate(r) scale(s)` and `z-index` = its index in `layout` (+1; missing → bottom). Same math as Konva placing the layer image at `(x+dx, y+dy)`.
+- Templates must not clip or put a stacking context around a layer (campaign-bold's slanted band is a `::before` for this reason).
 
 ## Gemini
 - SDK: `@google/genai`, `ai.models.generateContent` with `responseMimeType: 'application/json'` and `responseJsonSchema: z.toJSONSchema(suggestionSchema)` — one zod schema drives both the request and validation.
@@ -33,8 +42,9 @@ One self-contained HTML file per seeded template slug. Placeholders `{{key}}`:
 | `headlineSize` | `lg` / `xl` / `2xl` (CSS classes; `2xl` is `.\32xl`) |
 | `primary`, `secondary`, `accent`, `text` | hex colors |
 | `name`, `designation`, `organization`, `area`, `headline` | user text, HTML-escaped |
+| `backgroundUrl` | user's own design (Cloudinary, own uploads only); used by `own-design.html` as a full-page `<img class="bg">`, so the load check covers it and it lands in the editor's background layer |
 
-Unknown keys become empty strings. New template = seed entry + `<slug>.html`.
+Unknown keys become empty strings. New template = seed entry + `<slug>.html`, with `data-layer="headline"` on the headline and `data-layer="info"` on the name/designation/area block (layout editor, see below).
 
 ## Fonts
 Hind Siliguri (Regular, Bold, OFL) bundled in `server/src/templates/fonts/`, embedded as data URIs — no network font loading at render time.

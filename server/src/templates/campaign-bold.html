@@ -7,7 +7,9 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 1200px; height: 1600px; overflow: hidden; }
 body { font-family: 'Hind Siliguri', sans-serif; background: {{secondary}}; color: {{text}}; display: flex; flex-direction: column; }
-.top { background: {{primary}}; color: {{secondary}}; padding: 70px 60px 140px; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%); }
+/* The slanted band is a ::before behind the headline, so a moved headline is not clipped with it. */
+.top { position: relative; color: {{secondary}}; padding: 70px 60px 140px; text-align: center; }
+.top::before { content: ''; position: absolute; inset: 0; z-index: -1; background: {{primary}}; clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%); }
 .headline { font-weight: 700; line-height: 1.25; }
 .lg { font-size: 96px; } .xl { font-size: 120px; } .\32xl { font-size: 144px; }
 .photos { position: relative; display: flex; justify-content: center; margin-top: -110px; }
@@ -20,9 +22,9 @@ body { font-family: 'Hind Siliguri', sans-serif; background: {{secondary}}; colo
 </style>
 </head>
 <body>
-  <div class="top"><h1 class="headline {{headlineSize}}">{{headline}}</h1></div>
+  <div class="top"><h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1></div>
   <div class="photos">{{photos}}</div>
-  <div class="bottom">
+  <div class="bottom" data-layer="info">
     <div class="name">{{name}}</div>
     <div class="meta">{{designation}}, {{organization}}</div>
     <div class="bar">{{area}}</div>

@@ -9,7 +9,8 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 
 ## 2. Choose a template
 1. After logging in, click **টেমপ্লেট দেখুন** (View templates) on the home page.
-2. Filter by occasion: Victory Day, Mourning / Tribute, Election Campaign, Greetings, Eid / Festival.
+2. Filter by occasion: Victory Day, Mourning / Tribute, Election Campaign, Greetings, Eid / Festival, Own design.
+   - Don't like any design? Choose **নিজের ডিজাইন** (Own design): you upload your own background image (an upright 3:4 image such as 1200×1600 fits best; other sizes are cropped at the edges). Your text and photos go on top, and after the poster is made you can place them anywhere with **লেআউট সম্পাদনা** (see section 5).
 3. Each card shows a preview of the finished poster, its occasion and how many photos it takes (1–3). Click the one you like.
 
 ## 3. Fill the form
@@ -33,15 +34,24 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 2. Check the preview. Colors and layout are suggested by AI to match the occasion.
 3. Not happy? Edit the text and click **আবার তৈরি করুন** (Regenerate). The button shows how many tries are left — **3** per poster.
 
-## 5. Download
+## 5. Move things around (layout editor)
+1. On a finished poster, click **লেআউট সম্পাদনা** (Edit layout).
+2. Drag the headline, the name box or any photo anywhere on the poster.
+3. Click a part to select it: drag a corner to make it bigger or smaller, drag the round dot above it to rotate.
+4. Parts can overlap: select one and click **সামনে আনুন** (Bring to front) to put it on top.
+5. Click **সংরক্ষণ করুন** (Save). The poster is made again in your new layout; colors stay the same and it does **not** use up a regenerate. **আগের মতো করুন** (Reset) puts everything back where the template had it; **বাতিল** (Cancel) closes the editor without changes.
+
+Your layout is kept when you later change the text and regenerate. Posters made before this feature need one regenerate before the editor appears.
+
+## 6. Download
 - **PNG** — high resolution (2400×3200), ready for the printing press.
 - **PDF** — same poster, for printers who prefer PDF.
 
-## 6. History
+## 7. History
 Click **আমার পোস্টার** (My posters) on the home page to see all your posters, newest first. Open one to download it again, regenerate it, or delete it (**মুছে ফেলুন**).
 
 ## Limits
-- Up to 10 generations per hour per account.
+- Up to 10 generations per hour per account (saving a layout counts as one).
 - Offensive or hateful text is rejected.
 
 ## Problems?

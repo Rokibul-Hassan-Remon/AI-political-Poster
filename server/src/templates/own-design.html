@@ -7,24 +7,25 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 1200px; height: 1600px; overflow: hidden; }
 body {
-  font-family: 'Hind Siliguri', sans-serif; color: {{text}};
-  background: radial-gradient(circle at 50% 30%, {{secondary}} 0 260px, transparent 262px), {{primary}};
-  border: 28px solid {{accent}}; display: flex; flex-direction: column; align-items: center;
-  padding: 70px 60px 50px; text-align: center;
+  font-family: 'Hind Siliguri', sans-serif; color: {{text}}; background: {{primary}};
+  display: flex; flex-direction: column; align-items: center; padding: 70px 60px 60px; text-align: center;
 }
-.headline { font-weight: 700; line-height: 1.25; text-shadow: 0 6px 18px rgba(0,0,0,.45); }
+/* The user's own design fills the page (cropped to 3:4); everything else sits on top and can be moved in the editor. */
+.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
+.headline { font-weight: 700; line-height: 1.25; text-shadow: 0 4px 16px rgba(0,0,0,.7); }
 .lg { font-size: 96px; } .xl { font-size: 120px; } .\32xl { font-size: 144px; }
 .photos { flex: 1; display: flex; gap: 36px; align-items: center; justify-content: center; width: 100%; margin: 40px 0; }
-.photo { width: 330px; height: 430px; object-fit: cover; border: 12px solid {{accent}}; border-radius: 24px; box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+.photo { width: 330px; height: 430px; object-fit: cover; border: 10px solid {{accent}}; border-radius: 24px; box-shadow: 0 16px 40px rgba(0,0,0,.4); }
 .n1 .photo { width: 560px; height: 700px; }
 .n2 .photo { width: 440px; height: 560px; }
 .n3 .photo { width: 290px; height: 380px; } .n3 .main { width: 360px; height: 470px; }
-.footer { width: 100%; background: {{accent}}; color: {{primary}}; border-radius: 24px; padding: 30px 40px; }
-.name { font-size: 76px; font-weight: 700; line-height: 1.2; }
+.footer { background: rgba(0,0,0,.55); border-radius: 24px; padding: 26px 50px; }
+.name { font-size: 76px; font-weight: 700; line-height: 1.2; color: {{accent}}; }
 .meta { font-size: 40px; line-height: 1.4; }
 </style>
 </head>
 <body>
+  <img class="bg" src="{{backgroundUrl}}" alt="">
   <h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1>
   <div class="photos n{{photoCount}}">{{photos}}</div>
   <div class="footer" data-layer="info">

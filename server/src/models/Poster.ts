@@ -14,8 +14,16 @@ const posterSchema = new Schema(
       headline: String, // empty → template's headlineDefault at render time
     },
     uploadedPhotoUrls: { type: [String], required: true },
+    backgroundUrl: String, // user's own design, only for templates with layoutConfig.customBackground
     // One per photo, same order: focal point (x, y in %) + zoom, set by the user on the form.
     photoAdjust: { type: [{ _id: false, x: Number, y: Number, zoom: Number }], default: undefined },
+    // Canvas editor: per [data-layer] move/scale/rotate, applied at render (render.service).
+    layout: { type: [{ _id: false, key: String, dx: Number, dy: Number, scale: Number, rotate: Number }], default: undefined },
+    // Cut-outs from the last render that the editor drags around: background JPEG + one PNG per layer.
+    layers: {
+      background: String,
+      items: { type: [{ _id: false, key: String, url: String, x: Number, y: Number, w: Number, h: Number }], default: undefined },
+    },
     aiSuggestion: Schema.Types.Mixed, // Gemini JSON used for the last render
     generatedImageUrl: String,
     generatedPdfUrl: String,

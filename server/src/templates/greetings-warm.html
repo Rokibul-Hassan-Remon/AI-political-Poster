@@ -24,9 +24,9 @@ body {
 </style>
 </head>
 <body>
-  <div class="band"><h1 class="headline {{headlineSize}}">{{headline}}</h1></div>
+  <div class="band"><h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1></div>
   <div class="photos n{{photoCount}}">{{photos}}</div>
-  <div class="footer">
+  <div class="footer" data-layer="info">
     <div class="name">{{name}}</div>
     <div class="meta">{{designation}}, {{organization}}</div>
     <div class="meta">{{area}}</div>

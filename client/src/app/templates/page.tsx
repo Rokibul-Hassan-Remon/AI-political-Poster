@@ -20,6 +20,7 @@ const OCCASIONS: [string, string][] = [
   ["campaign", "নির্বাচনী প্রচার"],
   ["greetings", "শুভেচ্ছা"],
   ["festival", "ঈদ / উৎসব"],
+  ["custom", "নিজের ডিজাইন"],
 ];
 
 export default function TemplatesPage() {

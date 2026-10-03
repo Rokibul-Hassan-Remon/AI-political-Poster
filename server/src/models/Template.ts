@@ -1,6 +1,6 @@
 import { Schema, model, type InferSchemaType } from 'mongoose';
 
-export const OCCASIONS = ['victory-day', 'mourning', 'campaign', 'greetings', 'festival'] as const;
+export const OCCASIONS = ['victory-day', 'mourning', 'campaign', 'greetings', 'festival', 'custom'] as const;
 
 const color = { type: String, required: true, match: /^#[0-9a-fA-F]{6}$/ };
 
@@ -15,6 +15,8 @@ const templateSchema = new Schema(
       photoSlots: { type: Number, required: true, min: 1, max: 3 },
       defaultScheme: { primary: color, secondary: color, accent: color, text: color },
       headlineDefault: { type: String, required: true },
+      // The user uploads the poster background (their own design); the poster needs `backgroundUrl`.
+      customBackground: { type: Boolean, default: false },
     },
     isActive: { type: Boolean, default: true },
   },
