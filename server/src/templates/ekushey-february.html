@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<style>
+{{fonts}}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1200px; height: 1600px; overflow: hidden; }
+body {
+  font-family: 'Hind Siliguri', sans-serif; color: {{text}};
+  background: linear-gradient(180deg, {{primary}} 0%, {{secondary}} 100%);
+  display: flex; flex-direction: column; align-items: center; padding: 60px 60px 50px; text-align: center;
+}
+/* Shaheed Minar: red sun behind five white pillars, the middle one bowing forward at the top. */
+.minar { position: relative; width: 520px; height: 230px; flex-shrink: 0; }
+.sun { position: absolute; left: 50%; bottom: 40px; width: 210px; height: 210px; margin-left: -105px; border-radius: 50%; background: {{accent}}; }
+.pillars { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center; gap: 22px; }
+.pillars i { width: 34px; background: #fff; display: block; }
+.pillars .p1 { height: 110px; } .pillars .p2 { height: 150px; }
+/* Middle: a tall frame with inner bars whose top bows forward. */
+.pillars .p3 { position: relative; width: 130px; height: 200px; background: linear-gradient(90deg, #fff 0 16px, transparent 16px 49px, #fff 49px 65px, transparent 65px 81px, #fff 81px 97px, transparent 97px 114px, #fff 114px); }
+.pillars .p3::before { content: ''; position: absolute; left: -10px; right: -10px; top: -26px; height: 40px; background: #fff; transform: perspective(200px) rotateX(35deg); transform-origin: bottom; }
+.base { position: absolute; left: 30px; right: 30px; bottom: -10px; height: 14px; background: #fff; }
+.headline { font-weight: 700; line-height: 1.25; margin-top: 40px; }
+.lg { font-size: 90px; } .xl { font-size: 112px; } .\32xl { font-size: 136px; }
+.photos { flex: 1; display: flex; gap: 40px; align-items: center; justify-content: center; width: 100%; margin: 30px 0; }
+.photo { width: 330px; height: 420px; object-fit: cover; border: 10px solid #fff; outline: 4px solid {{accent}}; outline-offset: 6px; }
+.n1 .photo { width: 520px; height: 640px; }
+.n2 .photo { width: 420px; height: 530px; }
+.footer { width: 100%; border-top: 8px solid {{accent}}; padding-top: 28px; }
+.name { font-size: 72px; font-weight: 700; line-height: 1.2; }
+.meta { font-size: 40px; line-height: 1.4; opacity: .9; }
+</style>
+</head>
+<body>
+  <div class="minar">
+    <div class="sun"></div>
+    <div class="pillars"><i class="p1"></i><i class="p2"></i><i class="p3"></i><i class="p2"></i><i class="p1"></i></div>
+    <div class="base"></div>
+  </div>
+  <h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1>
+  <div class="photos n{{photoCount}}">{{photos}}</div>
+  <div class="footer" data-layer="info">
+    <div class="name">{{name}}</div>
+    <div class="meta">{{designation}}, {{organization}}</div>
+    <div class="meta">{{area}}</div>
+  </div>
+</body>
+</html>

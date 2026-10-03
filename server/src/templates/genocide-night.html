@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<style>
+{{fonts}}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1200px; height: 1600px; overflow: hidden; }
+body {
+  font-family: 'Hind Siliguri', sans-serif; color: {{text}};
+  background: radial-gradient(ellipse 900px 700px at 50% 0%, {{secondary}} 0%, {{primary}} 70%);
+  display: flex; flex-direction: column; align-items: center; padding: 60px 60px 50px; text-align: center;
+}
+/* A single lit candle (memorial vigil). */
+.candle { position: relative; width: 60px; height: 190px; flex-shrink: 0; }
+.flame { position: absolute; left: 50%; top: 0; width: 40px; height: 70px; margin-left: -20px; border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%; background: radial-gradient(circle at 50% 70%, #fff7c2 0 25%, #ffb627 55%, #e85d04 100%); box-shadow: 0 0 60px 24px rgba(255,170,40,.35); }
+.wax { position: absolute; left: 0; bottom: 0; width: 60px; height: 110px; background: #eee; border-radius: 6px 6px 0 0; }
+.headline { font-weight: 700; line-height: 1.25; margin-top: 30px; }
+.lg { font-size: 92px; } .xl { font-size: 112px; } .\32xl { font-size: 136px; }
+.photos { flex: 1; display: flex; gap: 50px; align-items: center; justify-content: center; width: 100%; margin: 40px 0; }
+.photo { width: 440px; height: 560px; object-fit: cover; filter: grayscale(100%); border: 8px solid {{accent}}; box-shadow: 0 0 50px rgba(0,0,0,.8); }
+.n1 .photo { width: 580px; height: 720px; }
+.footer { width: 100%; border-top: 6px solid {{accent}}; padding-top: 28px; }
+.name { font-size: 72px; font-weight: 700; line-height: 1.2; }
+.meta { font-size: 40px; line-height: 1.4; opacity: .85; }
+</style>
+</head>
+<body>
+  <div class="candle"><div class="flame"></div><div class="wax"></div></div>
+  <h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1>
+  <div class="photos n{{photoCount}}">{{photos}}</div>
+  <div class="footer" data-layer="info">
+    <div class="name">{{name}}</div>
+    <div class="meta">{{designation}}, {{organization}}</div>
+    <div class="meta">{{area}}</div>
+  </div>
+</body>
+</html>

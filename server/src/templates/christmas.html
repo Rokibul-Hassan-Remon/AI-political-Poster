@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<style>
+{{fonts}}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1200px; height: 1600px; overflow: hidden; }
+body {
+  font-family: 'Hind Siliguri', sans-serif; color: {{text}}; background: {{primary}};
+  display: flex; flex-direction: column; align-items: center; text-align: center; position: relative;
+}
+/* Light snowfall dots over the whole poster. */
+body::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle, #ffffff40 3px, transparent 4px) 0 0 / 90px 90px, radial-gradient(circle, #ffffff30 2px, transparent 3px) 45px 45px / 90px 90px; }
+/* Green footer band with a gold edge. */
+body::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 330px; background: {{secondary}}; border-top: 14px solid {{accent}}; }
+/* Five-point star above the headline. */
+.star { position: relative; z-index: 1; width: 120px; height: 120px; margin-top: 50px; background: {{accent}};
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+.headline { position: relative; z-index: 1; font-weight: 700; line-height: 1.25; color: {{accent}}; padding: 20px 60px 0; text-shadow: 0 6px 18px rgba(0,0,0,.4); }
+.lg { font-size: 96px; } .xl { font-size: 120px; } .\32xl { font-size: 144px; }
+.photos { position: relative; z-index: 1; flex: 1; display: flex; gap: 36px; align-items: center; justify-content: center; width: 100%; padding: 20px 50px 50px; }
+.photo { width: 320px; height: 420px; object-fit: cover; border: 12px solid {{accent}}; border-radius: 24px; box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+.n1 .photo { width: 500px; height: 640px; }
+.n2 .photo { width: 420px; height: 540px; }
+.footer { position: relative; z-index: 1; height: 316px; display: flex; flex-direction: column; justify-content: center; padding: 0 50px; }
+.name { font-size: 76px; font-weight: 700; line-height: 1.2; color: {{accent}}; }
+.meta { font-size: 40px; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <div class="star"></div>
+  <h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1>
+  <div class="photos n{{photoCount}}">{{photos}}</div>
+  <div class="footer" data-layer="info">
+    <div class="name">{{name}}</div>
+    <div class="meta">{{designation}}, {{organization}}</div>
+    <div class="meta">{{area}}</div>
+  </div>
+</body>
+</html>

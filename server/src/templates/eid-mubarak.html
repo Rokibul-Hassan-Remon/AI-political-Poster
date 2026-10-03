@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<style>
+{{fonts}}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1200px; height: 1600px; overflow: hidden; }
+body {
+  font-family: 'Hind Siliguri', sans-serif; color: {{text}};
+  background: linear-gradient(180deg, {{primary}} 0%, {{secondary}} 100%);
+  border: 22px double {{accent}}; display: flex; flex-direction: column; align-items: center;
+  padding: 60px 60px 50px; text-align: center; position: relative;
+}
+/* Crescent: inset shadow on a transparent circle, so it sits cleanly on the gradient. */
+.moon { position: absolute; top: 50px; right: 70px; width: 170px; height: 170px; border-radius: 50%; box-shadow: inset -40px 18px 0 0 {{accent}}; transform: scaleX(-1); }
+.headline { font-weight: 700; line-height: 1.25; color: {{accent}}; text-shadow: 0 6px 18px rgba(0,0,0,.45); margin-top: 40px; }
+.lg { font-size: 96px; } .xl { font-size: 120px; } .\32xl { font-size: 144px; }
+.photos { flex: 1; display: flex; gap: 36px; align-items: center; justify-content: center; width: 100%; margin: 40px 0; }
+.photo { width: 330px; height: 430px; object-fit: cover; border: 10px solid {{accent}}; border-radius: 200px 200px 24px 24px; box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+.n1 .photo { width: 540px; height: 700px; border-radius: 280px 280px 24px 24px; }
+.n2 .photo { width: 440px; height: 560px; border-radius: 230px 230px 24px 24px; }
+.footer { width: 100%; border-top: 6px solid {{accent}}; border-bottom: 6px solid {{accent}}; padding: 26px 40px; }
+.name { font-size: 76px; font-weight: 700; line-height: 1.2; color: {{accent}}; }
+.meta { font-size: 40px; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <div class="moon"></div>
+  <h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1>
+  <div class="photos n{{photoCount}}">{{photos}}</div>
+  <div class="footer" data-layer="info">
+    <div class="name">{{name}}</div>
+    <div class="meta">{{designation}}, {{organization}}</div>
+    <div class="meta">{{area}}</div>
+  </div>
+</body>
+</html>

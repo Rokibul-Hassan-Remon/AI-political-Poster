@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<style>
+{{fonts}}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1200px; height: 1600px; overflow: hidden; }
+body {
+  font-family: 'Hind Siliguri', sans-serif; color: {{text}};
+  background: radial-gradient(circle at 50% 45%, {{secondary}} 0%, {{primary}} 70%);
+  border: 20px solid {{accent}}; display: flex; flex-direction: column; align-items: center;
+  padding: 50px 50px 40px; text-align: center; position: relative;
+}
+/* Mandala glow behind the photos: concentric gold rings. */
+.mandala { position: absolute; top: 380px; left: 50%; width: 900px; height: 900px; margin-left: -450px; border-radius: 50%;
+  background: repeating-radial-gradient(circle, transparent 0 28px, {{accent}}40 29px 33px); }
+/* Small diya-like flames along the top edge. */
+.lamps { position: relative; z-index: 1; width: 100%; height: 40px; background: radial-gradient(ellipse 14px 22px at 50% 60%, {{accent}} 90%, transparent 100%) 0 0 / 100px 40px repeat-x; }
+.headline { position: relative; z-index: 1; font-weight: 700; line-height: 1.25; color: {{accent}}; text-shadow: 0 6px 18px rgba(0,0,0,.5); margin-top: 30px; }
+.lg { font-size: 96px; } .xl { font-size: 120px; } .\32xl { font-size: 144px; }
+.photos { position: relative; z-index: 1; flex: 1; display: flex; gap: 36px; align-items: center; justify-content: center; width: 100%; margin: 30px 0; }
+.photo { width: 320px; height: 320px; object-fit: cover; border-radius: 50%; border: 12px solid {{accent}}; box-shadow: 0 0 0 10px {{primary}}, 0 0 0 16px {{accent}}, 0 16px 40px rgba(0,0,0,.5); }
+.n1 .photo { width: 560px; height: 560px; }
+.n2 .photo { width: 440px; height: 440px; }
+.n3 .main { width: 380px; height: 380px; }
+.footer { position: relative; z-index: 1; width: 100%; border-top: 6px solid {{accent}}; padding: 26px 40px 10px; }
+.name { font-size: 76px; font-weight: 700; line-height: 1.2; color: {{accent}}; }
+.meta { font-size: 40px; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <div class="mandala"></div>
+  <div class="lamps"></div>
+  <h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1>
+  <div class="photos n{{photoCount}}">{{photos}}</div>
+  <div class="footer" data-layer="info">
+    <div class="name">{{name}}</div>
+    <div class="meta">{{designation}}, {{organization}}</div>
+    <div class="meta">{{area}}</div>
+  </div>
+</body>
+</html>
