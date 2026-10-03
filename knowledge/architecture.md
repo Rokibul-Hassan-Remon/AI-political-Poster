@@ -109,3 +109,10 @@ client/src/
 | server | Render (Docker) | Chromium + fonts in image (D3) |
 | database | MongoDB Atlas (M0) | |
 | files | Cloudinary | |
+
+Steps:
+1. Atlas Network Access: allow `0.0.0.0/0` (Render has no fixed IP). Cloudinary: enable PDF delivery (see generation ops notes).
+2. Render → Web Service, root `server`, runtime Docker (`server/Dockerfile`), health check `/api/health`. Env: every key in `server/.env.example` except `PORT` (Render sets it); `CLIENT_URL` = Vercel URL. Free plan (512MB, sleeps) can crash Chromium — use Starter for demos.
+3. Render Shell, once: `node dist/scripts/seed.js`.
+4. Vercel → root `client`, env `API_URL=https://<service>.onrender.com`. Then set `CLIENT_URL` on Render and redeploy.
+5. Check `/api/health`, then make one poster and download PNG + PDF.
