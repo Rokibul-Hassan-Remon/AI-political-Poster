@@ -202,8 +202,12 @@ export default function LayoutEditor({
                   setSelected(undefined);
                 }}
                 disabled={busy}
-                className="rounded border border-red-600 px-2 py-1 font-semibold text-red-600 hover:bg-red-50"
+                className="flex items-center gap-1 rounded border border-red-600 px-2 py-1 font-semibold text-red-600 hover:bg-red-50"
               >
+                {/* Trash can: take the photo off the poster. */}
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6" />
+                </svg>
                 ছবিটি সরান
               </button>
             </>
@@ -214,8 +218,12 @@ export default function LayoutEditor({
               type="button"
               onClick={() => patch(key, { hidden: false })}
               disabled={busy}
-              className="rounded border border-green-700 px-2 py-1 text-green-700 hover:bg-green-50"
+              className="flex items-center gap-1 rounded border border-green-700 px-2 py-1 text-green-700 hover:bg-green-50"
             >
+              {/* Picture with a plus: put the photo back on the poster. */}
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M4 16l5-5 9 9M19 3v6M16 6h6" />
+              </svg>
               {photoLabel(key)} ফেরত আনুন
             </button>
           ))}
