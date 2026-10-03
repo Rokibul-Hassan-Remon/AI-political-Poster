@@ -16,6 +16,7 @@ type Template = {
 const OCCASIONS: [string, string][] = [
   ["", "সব"],
   ["victory-day", "বিজয় দিবস"],
+  ["national-day", "জাতীয় দিবস"],
   ["mourning", "শোক / স্মরণ"],
   ["campaign", "নির্বাচনী প্রচার"],
   ["greetings", "শুভেচ্ছা"],
@@ -26,7 +27,7 @@ export default function TemplatesPage() {
   const [occasion, setOccasion] = useState("");
   const [templates, setTemplates] = useState<Template[] | null>(null);
   const [error, setError] = useState("");
-  // The "own design" template gets its own banner above the grid instead of a card.
+  // The "own design" template is always shown as the last card in the grid, whatever the filter.
   const [own, setOwn] = useState<Template | null>(null);
 
   useEffect(() => {
@@ -48,21 +49,6 @@ export default function TemplatesPage() {
     <main className="mx-auto w-full max-w-5xl p-6">
       <h1 className="mb-4 text-3xl font-bold text-green-700">টেমপ্লেট বেছে নিন</h1>
 
-      {own && (
-        <Link
-          href={`/create/${own._id}`}
-          className="mb-6 flex flex-col gap-3 rounded-lg border-2 border-dashed border-green-700 bg-green-50 p-5 transition hover:shadow-lg sm:flex-row sm:items-center sm:justify-between"
-        >
-          <div>
-            <p className="text-xl font-bold text-green-800">নিজের টেমপ্লেট দিয়ে পোস্টার বানান</p>
-            <p className="text-neutral-600">
-              আপনার পছন্দের ডিজাইন আপলোড করুন, সর্বোচ্চ {own.layoutConfig.photoSlots}টি ছবি দিন। লেখা ও ছবি পরে যেখানে খুশি সরাতে পারবেন।
-            </p>
-          </div>
-          <span className="shrink-0 rounded-md bg-green-700 px-4 py-2 text-center font-semibold text-white">ডিজাইন আপলোড করুন</span>
-        </Link>
-      )}
-
       <div className="mb-6 flex flex-wrap gap-2">
         {OCCASIONS.map(([value, label]) => (
           <button
@@ -76,7 +62,11 @@ export default function TemplatesPage() {
       </div>
 
       {error && <p className="text-red-600">{error}</p>}
-      {!templates && !error && <p>লোড হচ্ছে…</p>}
+      {!templates && !error && (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+          {[0, 1, 2].map((i) => <div key={i} className="aspect-3/4 animate-pulse rounded-lg bg-neutral-100" />)}
+        </div>
+      )}
       {templates?.length === 0 && <p>এই উপলক্ষে কোনো টেমপ্লেট নেই।</p>}
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
@@ -105,6 +95,23 @@ export default function TemplatesPage() {
             </Link>
           );
         })}
+        {own && templates && (
+          <Link
+            href={`/create/${own._id}`}
+            className="flex flex-col overflow-hidden rounded-lg border-2 border-dashed border-green-700 bg-green-50 transition hover:-translate-y-1 hover:shadow-xl"
+          >
+            <div className="flex aspect-3/4 flex-col items-center justify-center gap-3 p-4 text-center">
+              <span className="text-5xl font-light text-green-700">+</span>
+              <p className="text-lg font-bold text-green-800">নিজের টেমপ্লেট দিয়ে পোস্টার বানান</p>
+              <p className="text-sm text-neutral-600">
+                আপনার পছন্দের ডিজাইন আপলোড করুন, সর্বোচ্চ {own.layoutConfig.photoSlots}টি ছবি দিন। লেখা ও ছবি পরে যেখানে খুশি সরাতে পারবেন।
+              </p>
+            </div>
+            <div className="p-3">
+              <span className="block rounded-md bg-green-700 px-4 py-2 text-center font-semibold text-white">ডিজাইন আপলোড করুন</span>
+            </div>
+          </Link>
+        )}
       </div>
     </main>
   );

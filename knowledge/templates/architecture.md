@@ -22,10 +22,10 @@ Admin CRUD endpoints: post-MVP.
 Not created yet — written with the generation module, which owns the placeholder contract. One file per template: `server/src/templates/<slug>.html`, 1200×1600 CSS px, placeholders filled by `render.service` (see generation module). Bangla fonts bundled locally in `server/src/templates/fonts/`.
 
 ## Seed
-`npm run seed` (`server/src/scripts/seed.ts`): renders each template's thumbnail (needs Cloudinary + Chromium), upserts templates by slug (`victory-day-classic`, `mourning-tribute`, `campaign-bold`, `eid-mubarak`, `greetings-warm`) and, if `ADMIN_EMAIL` + `ADMIN_PASSWORD` are set, the admin user (role `admin`, password reset to the env value on every run). Idempotent.
+`npm run seed` (`server/src/scripts/seed.ts`): renders each template's thumbnail (needs Cloudinary + Chromium), upserts templates by slug (`victory-day-classic`, `mourning-tribute`, `campaign-bold`, `eid-mubarak`, `greetings-warm`, `ekushey-february`, `independence-day`, `intellectuals-day`, `genocide-night`, `own-design`) and, if `ADMIN_EMAIL` + `ADMIN_PASSWORD` are set, the admin user (role `admin`, password reset to the env value on every run). Idempotent.
 
 ## Client
-`client/src/app/templates/page.tsx`: a banner at the top links to the `customBackground` template ("own design", fetched once via `?occasion=custom`); below it, occasion filter chips and cards for the other templates link to `/create/[templateId]`. Linked from the home page user menu.
+`client/src/app/templates/page.tsx`: occasion filter chips and cards for the templates link to `/create/[templateId]`; the `customBackground` template ("own design", fetched once via `?occasion=custom`) is always the last card in the grid, whatever the filter. Linked from the site header (`user-menu.tsx`, every page) and the home page hero, which also shows the first 3 template thumbnails.
 
 ## Files
 `server/src/models/Template.ts`, `server/src/routes/templates.ts`, `server/src/scripts/seed.ts`

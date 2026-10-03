@@ -1,6 +1,6 @@
 import { Schema, model, type InferSchemaType } from 'mongoose';
 
-export const OCCASIONS = ['victory-day', 'mourning', 'campaign', 'greetings', 'festival', 'custom'] as const;
+export const OCCASIONS = ['victory-day', 'mourning', 'campaign', 'greetings', 'festival', 'national-day', 'custom'] as const;
 
 const color = { type: String, required: true, match: /^#[0-9a-fA-F]{6}$/ };
 

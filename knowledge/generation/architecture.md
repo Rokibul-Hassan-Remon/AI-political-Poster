@@ -2,7 +2,7 @@
 
 ## Pipeline (`generation.service.run(posterId)`)
 1. Load poster + template. Headline = `formData.headline` or `layoutConfig.headlineDefault`.
-2. `gemini.service.suggest({ occasionType, defaultScheme, headline })` → JSON validated with zod. On any error (no key, 15s timeout, bad JSON) → fallback: `defaultScheme`, `headlineSize` by headline length (≤12 chars `2xl`, ≤24 `xl`, else `lg`).
+2. `gemini.service.suggest({ occasionType, defaultScheme, headline })` (`occasionType` is sent as `"<occasionType> (<template title>)"` so Gemini knows the exact day, e.g. 21 February vs 26 March) → JSON validated with zod. On any error (no key, 15s timeout, bad JSON) → fallback: `defaultScheme`, `headlineSize` by headline length (≤12 chars `2xl`, ≤24 `xl`, else `lg`).
 3. `render.service.render(slug, data)` → fill `server/src/templates/<slug>.html` → Puppeteer → PNG + PDF buffers.
    `render` also returns the layout-editor cut-outs (see "Layers" below).
 4. Upload PNG, PDF, background and layer PNGs to Cloudinary `rise-together/posters/<userId>/` via `storage.service` → `Poster.updateOne` (`completed`, `aiSuggestion`, URLs). Any throw → `failed` + generic `error` (details only in logs/GenerationLog).
@@ -21,7 +21,7 @@
 ## Gemini
 - SDK: `@google/genai`, `ai.models.generateContent` with `responseMimeType: 'application/json'` and `responseJsonSchema: z.toJSONSchema(suggestionSchema)` — one zod schema drives both the request and validation.
 - Response: `{ scheme: {primary,secondary,accent,text}, headlineSize: 'lg'|'xl'|'2xl' }` (colors `#RRGGBB`).
-- Prompt carries only occasion, default colors, headline length — no user text or PII. Photo order is the user's, not Gemini's (D8).
+- Prompt carries only occasion + template title, default colors, headline length — no user text or PII. Photo order is the user's, not Gemini's (D8).
 - Model: `GEMINI_MODEL`, default `gemini-3.8-flash` (`gemini-2.5-flash` returns 404 for new keys as of 2026-10-03).
 - Cache by `templateId + occasion` is post-MVP (cost control).
 

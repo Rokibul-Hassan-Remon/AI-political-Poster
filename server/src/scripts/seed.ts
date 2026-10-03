@@ -64,6 +64,50 @@ const templates: Omit<TemplateData, 'createdAt' | 'updatedAt' | 'isActive' | 'th
     },
   },
   {
+    title: 'শহীদ দিবস ও মাতৃভাষা দিবস',
+    slug: 'ekushey-february',
+    occasionType: 'national-day',
+    layoutConfig: {
+      photoSlots: 2,
+      defaultScheme: { primary: '#141414', secondary: '#3A3A3A', accent: '#D7263D', text: '#FFFFFF' },
+      headlineDefault: 'অমর একুশে ফেব্রুয়ারি',
+      customBackground: false,
+    },
+  },
+  {
+    title: 'মহান স্বাধীনতা দিবস',
+    slug: 'independence-day',
+    occasionType: 'national-day',
+    layoutConfig: {
+      photoSlots: 3,
+      defaultScheme: { primary: '#006A4E', secondary: '#F42A41', accent: '#FFD700', text: '#FFFFFF' },
+      headlineDefault: 'মহান স্বাধীনতা দিবস',
+      customBackground: false,
+    },
+  },
+  {
+    title: 'শহীদ বুদ্ধিজীবী দিবস',
+    slug: 'intellectuals-day',
+    occasionType: 'mourning',
+    layoutConfig: {
+      photoSlots: 2,
+      defaultScheme: { primary: '#F4F1EA', secondary: '#DCD6C8', accent: '#1A1A1A', text: '#1A1A1A' },
+      headlineDefault: 'শহীদ বুদ্ধিজীবী দিবস',
+      customBackground: false,
+    },
+  },
+  {
+    title: 'গণহত্যা দিবস (২৫ মার্চ)',
+    slug: 'genocide-night',
+    occasionType: 'mourning',
+    layoutConfig: {
+      photoSlots: 2,
+      defaultScheme: { primary: '#0A0A0A', secondary: '#4A0D0D', accent: '#8B0000', text: '#FFFFFF' },
+      headlineDefault: '২৫ মার্চ কালরাত্রি',
+      customBackground: false,
+    },
+  },
+  {
     title: 'নিজের ডিজাইন',
     slug: 'own-design',
     occasionType: 'custom',

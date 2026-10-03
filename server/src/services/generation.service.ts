@@ -35,7 +35,7 @@ export async function run(posterId: string, { keepSuggestion = false } = {}): Pr
     if (kept?.success) suggestion = kept.data;
     else try {
       ({ suggestion, prompt, tokens } = await suggest({
-        occasionType: template.occasionType,
+        occasionType: `${template.occasionType} (${template.title})`, // title tells Gemini which day, e.g. 21 Feb vs 26 March
         defaultScheme: scheme,
         headline,
       }));
