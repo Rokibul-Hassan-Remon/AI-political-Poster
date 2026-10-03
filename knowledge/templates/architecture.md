@@ -19,7 +19,13 @@
 Admin CRUD endpoints: post-MVP.
 
 ## HTML templates
-Not created yet — written with the generation module, which owns the placeholder contract. One file per template: `server/src/templates/<slug>.html`, 1200×1600 CSS px, placeholders filled by `render.service` (see generation module). Bangla fonts bundled locally in `server/src/templates/fonts/`.
+The generation module owns the placeholder contract. One file per template: `server/src/templates/<slug>.html`, 1200×1600 CSS px, placeholders filled by `render.service` (see generation module). Bangla fonts bundled locally in `server/src/templates/fonts/`.
+
+Design conventions (keep when adding a template):
+- Decorations (rays, sun/moon, patterns, bands) are plain `position:absolute; z-index:-1` divs or body pseudo-elements: behind every `[data-layer]` part, above the body background. Never give `.photos` a `z-index` — it would trap the photos in a stacking context and break the editor's "bring to front".
+- Colors come only from `{{primary}}/{{secondary}}/{{accent}}/{{text}}` (plus white/black alpha), since Gemini may swap the scheme. Hex alpha suffixes (`{{accent}}40`) are fine.
+- Size photos for `.n1/.n2/.n3` (3 photos must fit in ~1080px width); shape overrides keep the template's width.
+- Text keeps the `.headline/.name/.meta` classes (user text colors override `color`), so headline effects use `-webkit-text-stroke` + `paint-order` and `text-shadow`, not gradient-clipped text.
 
 ## Seed
 `npm run seed` (`server/src/scripts/seed.ts`): renders each template's thumbnail (needs Cloudinary + Chromium), upserts templates by slug (`victory-day-classic`, `mourning-tribute`, `campaign-bold`, `eid-mubarak`, `greetings-warm`, `ekushey-february`, `independence-day`, `intellectuals-day`, `genocide-night`, `pohela-boishakh`, `durga-puja`, `buddha-purnima`, `christmas`, `own-design`) and, if `ADMIN_EMAIL` + `ADMIN_PASSWORD` are set, the admin user (role `admin`, password reset to the env value on every run). Idempotent.

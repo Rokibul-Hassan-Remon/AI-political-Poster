@@ -9,26 +9,38 @@ html, body { width: 1200px; height: 1600px; overflow: hidden; }
 body {
   font-family: 'Hind Siliguri', sans-serif; color: {{text}};
   background: linear-gradient(180deg, {{primary}} 0%, {{secondary}} 100%);
-  display: flex; flex-direction: column; align-items: center; padding: 60px 60px 50px; text-align: center; position: relative;
+  display: flex; flex-direction: column; align-items: center; padding: 60px 60px 150px; text-align: center; position: relative;
 }
-/* Full moon with a soft halo, top right. */
-.moon { position: absolute; top: 60px; right: 80px; width: 200px; height: 200px; border-radius: 50%; background: {{accent}}; box-shadow: 0 0 60px 20px {{accent}}66; }
-/* Lotus petals along the bottom edge. */
-body::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 60px;
-  background: radial-gradient(ellipse 50px 60px at 50% 100%, {{accent}}88 98%, transparent 100%) 0 0 / 100px 60px repeat-x; }
-.headline { position: relative; font-weight: 700; line-height: 1.25; color: {{accent}}; text-shadow: 0 6px 18px rgba(0,0,0,.45); margin-top: 180px; }
-.lg { font-size: 96px; } .xl { font-size: 120px; } .\32xl { font-size: 144px; }
-.photos { flex: 1; display: flex; gap: 36px; align-items: center; justify-content: center; width: 100%; margin: 30px 0; }
-.photo { width: 320px; height: 420px; object-fit: cover; border: 8px solid {{accent}}; border-radius: 160px 160px 24px 24px; box-shadow: 0 0 40px {{accent}}55; }
-.n1 .photo { width: 500px; height: 620px; border-radius: 250px 250px 24px 24px; }
-.n2 .photo { width: 420px; height: 540px; border-radius: 210px 210px 24px 24px; }
-.footer { width: 100%; padding: 20px 40px 50px; }
-.name { font-size: 76px; font-weight: 700; line-height: 1.2; color: {{accent}}; }
-.meta { font-size: 40px; line-height: 1.4; }
+/* Decorations sit at z-index -1, behind every movable part. */
+/* Full moon centred at the top, with a wide halo, above the headline. */
+.moon { position: absolute; z-index: -1; left: 50%; top: 36px; width: 210px; height: 210px; margin-left: -105px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #ffffffaa, transparent 55%), {{accent}}; box-shadow: 0 0 80px 30px {{accent}}66, 0 0 260px 120px {{accent}}22; }
+/* Scattered stars. */
+.stars { position: absolute; z-index: -1; inset: 0; background:
+  radial-gradient(circle at 10% 8%, #fff 0 3px, transparent 4px), radial-gradient(circle at 85% 12%, #fff 0 4px, transparent 5px),
+  radial-gradient(circle at 20% 28%, #ffffffaa 0 3px, transparent 4px), radial-gradient(circle at 92% 34%, #ffffffaa 0 3px, transparent 4px),
+  radial-gradient(circle at 6% 50%, #ffffff88 0 3px, transparent 4px), radial-gradient(circle at 74% 4%, #ffffffaa 0 2px, transparent 3px); }
+/* Lotus at the bottom: overlapping petals in two rows, in the accent colour. */
+.lotus { position: absolute; z-index: -1; left: 0; right: 0; bottom: 0; height: 170px;
+  background: radial-gradient(ellipse 60px 110px at 50% 100%, {{accent}} 97%, transparent 100%) 0 70px / 120px 100px repeat-x,
+  radial-gradient(ellipse 60px 110px at 50% 100%, color-mix(in srgb, {{accent}} 60%, {{secondary}}) 97%, transparent 100%) 60px 20px / 120px 150px repeat-x; }
+.headline { font-weight: 700; line-height: 1.2; color: {{accent}}; margin-top: 200px; -webkit-text-stroke: 6px {{primary}}; paint-order: stroke fill; text-shadow: 0 5px 0 {{primary}}, 0 16px 34px rgba(0,0,0,.55); }
+.lg { font-size: 100px; } .xl { font-size: 124px; } .\32xl { font-size: 148px; }
+.photos { flex: 1; display: flex; gap: 36px; align-items: center; justify-content: center; width: 100%; margin: 24px 0; }
+.photo { width: 320px; height: 420px; object-fit: cover; border: 10px solid {{accent}}; border-radius: 160px 160px 24px 24px; box-shadow: 0 0 0 6px {{primary}}, 0 0 50px {{accent}}66, 0 24px 50px rgba(0,0,0,.5); }
+.n1 .photo { width: 500px; height: 640px; border-radius: 250px 250px 28px 28px; }
+.n2 .photo { width: 420px; height: 560px; border-radius: 210px 210px 28px 28px; }
+.n3 .photo { width: 290px; height: 390px; } .n3 .main { width: 350px; height: 470px; border-radius: 175px 175px 24px 24px; }
+.footer { width: 100%; padding: 22px 40px; background: linear-gradient(90deg, transparent, {{primary}}bb 20% 80%, transparent);
+  border-image: linear-gradient(90deg, transparent, {{accent}} 15% 85%, transparent) 1; border-width: 4px 0; border-style: solid; }
+.name { font-size: 84px; font-weight: 700; line-height: 1.2; color: {{accent}}; }
+.meta { font-size: 42px; line-height: 1.4; }
 </style>
 </head>
 <body>
+  <div class="stars"></div>
   <div class="moon"></div>
+  <div class="lotus"></div>
   <h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1>
   <div class="photos n{{photoCount}}">{{photos}}</div>
   <div class="footer" data-layer="info">

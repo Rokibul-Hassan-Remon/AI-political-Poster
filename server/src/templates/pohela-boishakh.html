@@ -7,29 +7,44 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 1200px; height: 1600px; overflow: hidden; }
 body {
-  font-family: 'Hind Siliguri', sans-serif; color: {{text}}; background: {{primary}};
+  font-family: 'Hind Siliguri', sans-serif; color: {{text}};
+  background: radial-gradient(ellipse at 50% 50%, #ffffff 0%, {{primary}} 60%);
   display: flex; flex-direction: column; align-items: center; text-align: center; position: relative;
 }
-/* Lal-paar sari border: red bands with a marigold stripe, top and bottom. */
-body::before, body::after { content: ''; position: absolute; left: 0; right: 0; height: 60px; background: {{secondary}}; }
-body::before { top: 0; border-bottom: 10px solid {{accent}}; }
-body::after { bottom: 0; border-top: 10px solid {{accent}}; }
-/* Rising sun behind the photos, with alpana-style dotted rings. */
-.sun { position: absolute; top: 420px; left: 50%; width: 820px; height: 820px; margin-left: -410px; border-radius: 50%;
-  background: radial-gradient(circle, {{accent}}55 0 52%, transparent 53%), repeating-radial-gradient(circle, transparent 0 34px, {{secondary}}33 35px 39px); }
-.headline { position: relative; z-index: 1; font-weight: 700; line-height: 1.25; color: {{secondary}}; padding: 120px 60px 0; }
-.lg { font-size: 96px; } .xl { font-size: 120px; } .\32xl { font-size: 144px; }
-.photos { position: relative; z-index: 1; flex: 1; display: flex; gap: 36px; align-items: center; justify-content: center; width: 100%; padding: 30px 50px; }
-.photo { width: 320px; height: 420px; object-fit: cover; border: 12px solid {{secondary}}; outline: 6px solid {{accent}}; border-radius: 24px; box-shadow: 0 16px 40px rgba(0,0,0,.25); }
-.n1 .photo { width: 520px; height: 680px; }
-.n2 .photo { width: 430px; height: 560px; }
-.footer { position: relative; z-index: 1; width: 100%; padding: 30px 50px 110px; }
-.name { font-size: 76px; font-weight: 700; line-height: 1.2; color: {{secondary}}; }
-.meta { font-size: 40px; line-height: 1.4; }
+/* Decorations sit at z-index -1, behind every movable part. */
+/* Lal-paar sari border, top and bottom: red band, marigold stripe, and a row of white alpana dots. */
+.sari { position: absolute; z-index: -1; left: 0; right: 0; height: 90px;
+  background: radial-gradient(circle, #ffffffcc 0 7px, transparent 8px) 0 50% / 50px 50px repeat-x, {{secondary}}; }
+.sari.t { top: 0; border-bottom: 12px solid {{accent}}; box-shadow: 0 6px 0 {{secondary}}; }
+.sari.b { bottom: 0; border-top: 12px solid {{accent}}; box-shadow: 0 -6px 0 {{secondary}}; }
+/* Rising sun with rays behind the photos, ringed by an alpana-style petal circle. */
+.rays { position: absolute; z-index: -1; left: 50%; top: 780px; width: 1800px; height: 1800px; margin: -900px 0 0 -900px;
+  background: repeating-conic-gradient({{accent}}40 0 6deg, transparent 6deg 12deg);
+  -webkit-mask-image: radial-gradient(circle, #000 18%, transparent 50%); mask-image: radial-gradient(circle, #000 18%, transparent 50%); }
+.alpana { position: absolute; z-index: -1; left: 50%; top: 780px; width: 860px; height: 860px; margin: -430px 0 0 -430px; border-radius: 50%;
+  background: radial-gradient(circle, {{accent}} 0 54%, transparent 54.5%), repeating-conic-gradient({{secondary}} 0 7deg, transparent 7deg 15deg),
+  radial-gradient(circle, transparent 0 62%, {{secondary}} 62.5% 64%, transparent 64.5%);
+  -webkit-mask-image: radial-gradient(circle, #000 0 54.5%, transparent 55% 57%, #000 57.5% 61%, transparent 61.5% 62%, #000 62.5% 64%, transparent 64.5%);
+  mask-image: radial-gradient(circle, #000 0 54.5%, transparent 55% 57%, #000 57.5% 61%, transparent 61.5% 62%, #000 62.5% 64%, transparent 64.5%);
+  box-shadow: 0 0 120px {{accent}}66; }
+.headline { font-weight: 700; line-height: 1.2; color: {{secondary}}; padding: 140px 60px 0; -webkit-text-stroke: 6px #fff; paint-order: stroke fill; text-shadow: 0 6px 0 {{accent}}, 0 16px 30px rgba(0,0,0,.25); }
+.lg { font-size: 108px; } .xl { font-size: 132px; } .\32xl { font-size: 156px; }
+.photos { flex: 1; display: flex; gap: 36px; align-items: center; justify-content: center; width: 100%; padding: 30px 50px; }
+.photo { width: 330px; height: 440px; object-fit: cover; border: 12px solid #fff; outline: 8px solid {{secondary}}; border-radius: 28px; box-shadow: 0 0 0 14px {{accent}}, 0 26px 50px rgba(0,0,0,.35); }
+.n1 .photo { width: 540px; height: 700px; }
+.n2 .photo { width: 440px; height: 580px; }
+.n3 .photo { width: 290px; height: 390px; } .n3 .main { width: 360px; height: 480px; }
+.footer { position: relative; width: calc(100% - 110px); margin-bottom: 140px; padding: 28px 40px; border-radius: 28px;
+  background: linear-gradient(180deg, #ffffff26, transparent), {{secondary}}; color: {{primary}}; box-shadow: 0 18px 40px rgba(0,0,0,.25), inset 0 0 0 4px {{secondary}}, inset 0 0 0 7px {{accent}}; }
+.name { font-size: 84px; font-weight: 700; line-height: 1.2; }
+.meta { font-size: 42px; line-height: 1.4; }
 </style>
 </head>
 <body>
-  <div class="sun"></div>
+  <div class="sari t"></div>
+  <div class="sari b"></div>
+  <div class="rays"></div>
+  <div class="alpana"></div>
   <h1 data-layer="headline" class="headline {{headlineSize}}">{{headline}}</h1>
   <div class="photos n{{photoCount}}">{{photos}}</div>
   <div class="footer" data-layer="info">
