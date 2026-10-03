@@ -33,11 +33,11 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     }
   }
 
-  const input = "w-full rounded border border-neutral-300 px-3 py-2 focus:border-green-700 focus:outline-none";
+  const input = "w-full rounded-lg border border-neutral-300 px-3 py-2 focus:border-green-700 focus:outline-none";
 
   return (
-    <main className="flex flex-1 items-center justify-center p-6">
-      <form onSubmit={onSubmit} className="w-full max-w-sm space-y-4">
+    <main className="flex flex-1 items-center justify-center bg-linear-to-b from-green-50 to-white p-6">
+      <form onSubmit={onSubmit} className="w-full max-w-sm space-y-4 rounded-2xl border border-neutral-200 bg-white p-6 shadow-xl shadow-green-900/5">
         <h1 className="text-2xl font-bold text-green-700">{isRegister ? "অ্যাকাউন্ট খুলুন" : "লগইন"}</h1>
         {isRegister && (
           <label className="block space-y-1">
@@ -62,7 +62,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           />
         </label>
         {error && <p role="alert" className="text-red-600">{error}</p>}
-        <button disabled={busy} className="w-full rounded bg-green-700 py-2 font-semibold text-white disabled:opacity-60">
+        <button disabled={busy} className="w-full rounded-lg bg-green-700 py-2.5 font-semibold text-white hover:bg-green-800 disabled:opacity-60">
           {busy ? "অপেক্ষা করুন..." : isRegister ? "রেজিস্টার" : "লগইন"}
         </button>
         <p className="text-center text-sm">

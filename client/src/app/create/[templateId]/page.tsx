@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
@@ -97,11 +98,17 @@ export default function CreatePage() {
     img.onpointerup = img.onpointercancel = () => (img.onpointermove = null);
   }
 
-  if (!template) return <main className="p-6">{error ? <p className="text-red-600">{error}</p> : "লোড হচ্ছে…"}</main>;
+  if (!template)
+    return (
+      <main className="mx-auto w-full max-w-xl p-6">
+        {error ? <p className="text-red-600">{error}</p> : <div className="h-96 animate-pulse rounded-xl bg-neutral-100" />}
+      </main>
+    );
 
   return (
     <main className="mx-auto w-full max-w-xl p-6">
-      <h1 className="mb-4 text-3xl font-bold text-green-700">{template.title}</h1>
+      <Link href="/templates" className="text-sm font-semibold text-green-700 hover:underline">← সব টেমপ্লেট</Link>
+      <h1 className="mb-4 mt-1 text-3xl font-bold text-green-700">{template.title}</h1>
       <form onSubmit={submit} className="flex flex-col gap-4">
         <PosterFields headlinePlaceholder={template.layoutConfig.headlineDefault} />
         {template.layoutConfig.customBackground && (
@@ -188,8 +195,9 @@ export default function CreatePage() {
           </span>
         </div>
         {error && <p className="text-red-600">{error}</p>}
-        <button disabled={busy} className="rounded bg-green-700 px-4 py-2 font-semibold text-white disabled:opacity-50">
-          {busy ? "পাঠানো হচ্ছে…" : "পোস্টার তৈরি করুন"}
+        <button disabled={busy} className="flex items-center justify-center gap-2 rounded-lg bg-green-700 px-4 py-3 text-lg font-semibold text-white shadow-lg shadow-green-700/20 hover:bg-green-800 disabled:opacity-60">
+          {busy && <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />}
+          {busy ? "ছবি আপলোড হচ্ছে…" : "পোস্টার তৈরি করুন"}
         </button>
       </form>
     </main>

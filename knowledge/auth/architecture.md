@@ -66,7 +66,7 @@ Password: 8–72 chars (bcrypt ignores bytes after 72).
 ## Client
 - `next.config.ts` rewrites `/api/*` → `${API_URL}/api/*`, so the browser sees one origin (cookie is same-site, no CORS).
 - `src/lib/api.ts`: `api(path, init)` adds the access token; on 401 (non-auth routes) it calls `/api/auth/refresh` once (shared across parallel requests), retries, and redirects to `/login` if refresh fails. Also `login`, `register`, `logout`, `getUser` (restores the session after reload).
-- Pages: `src/app/(auth)/login`, `register` (shared `auth-form.tsx`); `src/app/user-menu.tsx` on the home page.
+- Pages: `src/app/(auth)/login`, `register` (shared `auth-form.tsx`); `src/app/user-menu.tsx` exports `SiteHeader`, rendered in the root layout on every page (brand, nav, login/register or name + logout).
 
 ## Files
 `server/src/models/User.ts`, `server/src/routes/auth.ts`, `server/src/middleware/auth.ts`

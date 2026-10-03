@@ -10,6 +10,9 @@ import { MAX_REGENERATES, PosterFields, readPosterText, type LayoutEntry, type P
 // Konva needs the browser's canvas: never render it on the server.
 const LayoutEditor = dynamic(() => import("./layout-editor"), { ssr: false });
 
+// Cloudinary's fl_attachment makes the browser save the file instead of opening it in a tab.
+const download = (url?: string) => url?.replace("/upload/", "/upload/fl_attachment:poster/");
+
 export default function PosterPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -52,27 +55,60 @@ export default function PosterPage() {
     await api(`/api/posters/${id}`, { method: "DELETE" }).then(() => router.push("/history"), (e: Error) => setError(e.message));
   }
 
-  if (!poster) return <main className="p-6">{error ? <p className="text-red-600">{error}</p> : "লোড হচ্ছে…"}</main>;
+  if (!poster)
+    return (
+      <main className="mx-auto w-full max-w-5xl p-6">
+        {error ? <p className="text-red-600">{error}</p> : <div className="aspect-3/4 w-full max-w-md animate-pulse rounded-xl bg-neutral-100" />}
+      </main>
+    );
   const left = MAX_REGENERATES - poster.regenerateCount;
 
   return (
     <main className="mx-auto grid w-full max-w-5xl gap-6 p-6 md:grid-cols-2">
       {/* Poster on the right on wide screens, first on phones. */}
       <section className="md:order-last">
-        {poster.status === "generating" && <p className="animate-pulse text-lg">পোস্টার তৈরি হচ্ছে… একটু অপেক্ষা করুন।</p>}
-        {poster.status === "failed" && <p className="text-red-600">পোস্টার তৈরি হয়নি: {poster.error}</p>}
+        {poster.status === "generating" && (
+          <div className="flex aspect-3/4 w-full flex-col items-center justify-center gap-4 rounded-xl border border-neutral-200 bg-neutral-50 p-6 text-center">
+            <span className="h-12 w-12 animate-spin rounded-full border-4 border-green-700 border-t-transparent" />
+            <p className="text-xl font-semibold text-green-800">পোস্টার তৈরি হচ্ছে…</p>
+            <p className="text-neutral-600">সাধারণত এক মিনিটের কম লাগে। পেজটি খোলা রাখুন, তৈরি হলেই এখানে দেখাবে।</p>
+          </div>
+        )}
+        {poster.status === "failed" && (
+          <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-red-700">
+            <p className="font-semibold">পোস্টার তৈরি হয়নি।</p>
+            <p className="mt-1 text-sm">{poster.error} পাশের ফর্ম থেকে আবার চেষ্টা করুন।</p>
+          </div>
+        )}
         {poster.status === "completed" && editing && (
           <LayoutEditor poster={poster} onSave={saveLayout} onCancel={() => setEditing(false)} />
         )}
         {poster.status === "completed" && !editing && (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={poster.generatedImageUrl} alt="পোস্টার" className="w-full rounded border" />
+            <img src={poster.generatedImageUrl} alt="পোস্টার" className="w-full rounded-xl border shadow-lg" />
             <div className="mt-3 flex flex-wrap gap-3">
-              <a href={poster.generatedImageUrl} target="_blank" className="rounded bg-green-700 px-4 py-2 font-semibold text-white">PNG ডাউনলোড</a>
-              <a href={poster.generatedPdfUrl} target="_blank" className="rounded border border-green-700 px-4 py-2 font-semibold text-green-700">PDF ডাউনলোড</a>
+              <a href={download(poster.generatedImageUrl)} className="flex items-center gap-2 rounded bg-green-700 px-4 py-2 font-semibold text-white hover:bg-green-800">
+                {/* Picture with a down arrow: download the image. */}
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 3v12M7 10l5 5 5-5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                </svg>
+                PNG ডাউনলোড
+              </a>
+              <a href={download(poster.generatedPdfUrl)} className="flex items-center gap-2 rounded border border-green-700 px-4 py-2 font-semibold text-green-700 hover:bg-green-50">
+                {/* Document with folded corner. */}
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+                  <path d="M14 3v5h5M12 11v6M9.5 14.5 12 17l2.5-2.5" />
+                </svg>
+                PDF ডাউনলোড
+              </a>
               {poster.layers && (
-                <button onClick={() => setEditing(true)} className="rounded border border-green-700 px-4 py-2 font-semibold text-green-700">
+                <button onClick={() => setEditing(true)} className="flex items-center gap-2 rounded border border-green-700 px-4 py-2 font-semibold text-green-700 hover:bg-green-50">
+                  {/* Pencil: edit the layout. */}
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" />
+                  </svg>
                   লেআউট সম্পাদনা
                 </button>
               )}

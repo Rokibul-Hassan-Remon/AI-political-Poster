@@ -8,9 +8,9 @@ Make a ready-to-print political poster in a few minutes: fill a form, add photos
 3. You are logged in. Next time, use **Login** with the same email and password.
 
 ## 2. Choose a template
-1. After logging in, click **টেমপ্লেট দেখুন** (View templates) on the home page.
-2. Filter by occasion: Victory Day, Mourning / Tribute, Election Campaign, Greetings, Eid / Festival.
-   - Don't like any design? Click the **নিজের টেমপ্লেট দিয়ে পোস্টার বানান** (Make a poster with your own template) banner at the top of the page: you upload your own background image (an upright 3:4 image such as 1200×1600 fits best; other sizes are cropped at the edges). Your text and photos go on top, and after the poster is made you can place them anywhere with **লেআউট সম্পাদনা** (see section 5).
+1. Click **পোস্টার বানানো শুরু করুন** (Start making a poster) on the home page, or **টেমপ্লেট** (Templates) in the menu bar at the top of every page.
+2. Filter by occasion: Victory Day, National Days (21 February, 26 March), Mourning / Tribute (also 14 December and 25 March), Election Campaign, Greetings, Eid / Festival.
+   - Don't like any design? Click the **নিজের টেমপ্লেট দিয়ে পোস্টার বানান** (Make a poster with your own template) card, the last one after all the ready-made templates: you upload your own background image (an upright 3:4 image such as 1200×1600 fits best; other sizes are cropped at the edges). Your text and photos go on top, and after the poster is made you can place them anywhere with **লেআউট সম্পাদনা** (see section 5).
 3. Each card shows a preview of the finished poster, its occasion and how many photos it takes (1–3). Click the one you like.
 
 ## 3. Fill the form
@@ -49,8 +49,10 @@ Your layout and colors are kept when you later change the text and regenerate. P
 - **PNG** — high resolution (2400×3200), ready for the printing press.
 - **PDF** — same poster, for printers who prefer PDF.
 
+Clicking either button saves the file to your device (as `poster.png` / `poster.pdf`); it no longer opens in a new tab.
+
 ## 7. History
-Click **আমার পোস্টার** (My posters) on the home page to see all your posters, newest first. Open one to download it again, regenerate it, or delete it (**মুছে ফেলুন**).
+Click **আমার পোস্টার** (My posters) in the top menu bar to see all your posters, newest first. Open one to download it again, regenerate it, or delete it (**মুছে ফেলুন**).
 
 ## Limits
 - Up to 10 generations per hour per account (saving a layout counts as one).

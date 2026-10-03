@@ -55,5 +55,5 @@ client `src/app/{create/[templateId],posters/[id],history}/page.tsx`, shared fie
 ## Frontend pages
 - `/templates` — library with occasion filter
 - `/create/[templateId]` — form + upload
-- `/posters/[id]` — polling, preview, edit text, regenerate, download, layout editor (`layout-editor.tsx`, react-konva, loaded with `ssr: false`)
+- `/posters/[id]` — polling (spinner card while generating), preview, edit text, regenerate, download (Cloudinary `fl_attachment:poster` in the URL so the browser saves `poster.png`/`.pdf` instead of opening a tab), layout editor (`layout-editor.tsx`, react-konva, loaded with `ssr: false`)
 - `/history` — list
